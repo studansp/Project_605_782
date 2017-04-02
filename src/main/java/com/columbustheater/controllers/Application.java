@@ -1,10 +1,7 @@
 package com.columbustheater.controllers;
 import com.columbustheater.data.DataContext;
 import com.columbustheater.data.DataContextFactory;
-import com.columbustheater.models.Account;
-import com.columbustheater.models.Event;
-import com.columbustheater.models.Seat;
-import com.columbustheater.models.Section;
+import com.columbustheater.models.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -72,23 +69,6 @@ public class Application extends SpringBootServletInitializer {
             em.getTransaction().commit();
         }
 
-        CriteriaQuery<Event> eventCriteriaQuery = builder.createQuery(Event.class);
-        eventCriteriaQuery.select(eventCriteriaQuery.from(Event.class));
-
-        List<Event> events = em.createQuery(eventCriteriaQuery).getResultList();
-
-        if(events.isEmpty()) {
-            Event event = new Event();
-            event.setName("Brian Ferry");
-            event.setDate(new GregorianCalendar(2017, 5, 20, 20, 0).getTime());
-            event.setImageurl("http://media.ticketmaster.com/en-us/dam/a/c90/53cd884a-a01d-4498-8804-be67b086bc90_95181_EVENT_DETAIL_PAGE_16_9.jpg");
-
-            em.getTransaction().begin();
-            em.persist(event);
-            em.getTransaction().commit();
-        }
-
-
         CriteriaQuery<Section> sectionCriteriaQuery = builder.createQuery(Section.class);
         sectionCriteriaQuery.select(sectionCriteriaQuery.from(Section.class));
 
@@ -104,7 +84,6 @@ public class Application extends SpringBootServletInitializer {
 
             Section[] newSections = new Section[]{ orchestra, mezzanine, balcony};
             em.getTransaction().begin();
-
 
             for(int row=0;row<20;row++) {
                 for (int seat=0;seat<20;seat++) {
@@ -124,6 +103,35 @@ public class Application extends SpringBootServletInitializer {
 
             em.getTransaction().commit();
         }
+
+        CriteriaQuery<Event> eventCriteriaQuery = builder.createQuery(Event.class);
+        eventCriteriaQuery.select(eventCriteriaQuery.from(Event.class));
+        List<Event> events = em.createQuery(eventCriteriaQuery).getResultList();
+
+        CriteriaQuery<Seat> seatsCriteriaQuery = builder.createQuery(Seat.class);
+        seatsCriteriaQuery.select(seatsCriteriaQuery.from(Seat.class));
+        List<Seat> allSeats = em.createQuery(seatsCriteriaQuery).getResultList();
+
+        if(events.isEmpty()) {
+            Event event = new Event();
+            event.setName("Brian Ferry");
+            event.setDate(new GregorianCalendar(2017, 5, 20, 20, 0).getTime());
+            event.setImageurl("http://media.ticketmaster.com/en-us/dam/a/c90/53cd884a-a01d-4498-8804-be67b086bc90_95181_EVENT_DETAIL_PAGE_16_9.jpg");
+
+            em.getTransaction().begin();
+
+            for (Seat eventSeat :
+                    allSeats) {
+                Ticket eventTicket = new Ticket();
+                eventTicket.setEvent(event);
+                eventTicket.setSeat(eventSeat);
+                em.persist(eventTicket);
+            }
+
+            em.persist(event);
+            em.getTransaction().commit();
+        }
+
     }
 
     private static SpringApplicationBuilder configureApplication(SpringApplicationBuilder builder) {

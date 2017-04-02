@@ -1,9 +1,6 @@
 package com.columbustheater.data;
 
-import com.columbustheater.models.Account;
-import com.columbustheater.models.Event;
-import com.columbustheater.models.Seat;
-import com.columbustheater.models.Section;
+import com.columbustheater.models.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -45,6 +42,8 @@ public class DataContextFactory {
                 .addAnnotatedClass(Account.class)
                 .addAnnotatedClass(Section.class)
                 .addAnnotatedClass(Seat.class)
-                .addAnnotatedClass(Event.class);
+                .addAnnotatedClass(Event.class)
+                .addAnnotatedClass(Order.class)
+                .addAnnotatedClass(Ticket.class);
     }
 }
