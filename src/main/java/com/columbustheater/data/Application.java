@@ -1,24 +1,20 @@
-package com.columbustheater.controllers;
-import com.columbustheater.data.DataContext;
-import com.columbustheater.data.DataContextFactory;
+package com.columbustheater.data;
+import com.columbustheater.controllers.AuthController;
 import com.columbustheater.models.*;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.springframework.boot.Banner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.ComponentScan;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 @SpringBootApplication
+@ComponentScan(basePackageClasses = AuthController.class)
 public class Application extends SpringBootServletInitializer {
 
     private static DataContextFactory factory;
