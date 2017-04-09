@@ -4,7 +4,7 @@ import com.columbustheater.viewmodels.Response;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class CartItemController {
+public class CartItemController extends ControllerBase {
     private static final String path = "/cartitem";
 
     @RequestMapping(path=path, method = RequestMethod.POST)

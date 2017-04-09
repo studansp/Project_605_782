@@ -4,7 +4,7 @@ import com.columbustheater.viewmodels.Response;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class OrderController {
+public class OrderController extends ControllerBase {
     private static final String path = "/order";
 
     @RequestMapping(path=path, method = RequestMethod.POST)

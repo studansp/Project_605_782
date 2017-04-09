@@ -4,6 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
 
 /**
  * Created by Phillip on 4/2/2017.
@@ -31,5 +32,9 @@ public class DataContext {
 
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
+    }
+
+    public CriteriaBuilder getCriteriaBuilder() {
+        return session.getCriteriaBuilder();
     }
 }
