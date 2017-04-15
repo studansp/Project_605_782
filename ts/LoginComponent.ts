@@ -19,7 +19,7 @@ export class LoginComponent {
     }
 
     private handleResponse(loginResponse: ApiResponse<string>) {
-        if(loginResponse.status==ApiResponse.OK) {
+        if(loginResponse.model!=null) {
             alert("Success: "+loginResponse.model);
         } else {
             alert("Invalid username or password");

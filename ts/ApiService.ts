@@ -8,11 +8,7 @@ import {ApiResponse} from "./models/ApiResponse";
 
 @Injectable()
 export class ApiService {
-    private headers:Headers;
-    constructor (private http: Http) {
-        this.headers = new Headers();
-        this.headers.append('Content-Type', 'application/json');
-    }
+    constructor (private http: Http) {}
 
     public authenicate(model:LoginModel):Observable<ApiResponse<string>> {
         return this.simplePostRequest<string>("/authenticate", model);
@@ -38,7 +34,10 @@ export class ApiService {
     }
 
     private simplePostRequest<T>(url: string, model: any):Observable<ApiResponse<T>> {
-        return this.http.post(url, model, { headers: this.headers })
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
+        return this.http.post(url, model, { headers: headers })
             .map((res:Response)=>{ return this.extractData<T>(res)})
             .catch(this.handleError);
     }

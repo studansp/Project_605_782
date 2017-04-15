@@ -17,8 +17,6 @@ var ApiResponse_1 = require("./models/ApiResponse");
 var ApiService = (function () {
     function ApiService(http) {
         this.http = http;
-        this.headers = new http_1.Headers();
-        this.headers.append('Content-Type', 'application/json');
     }
     ApiService.prototype.authenicate = function (model) {
         return this.simplePostRequest("/authenticate", model);
@@ -44,7 +42,9 @@ var ApiService = (function () {
     };
     ApiService.prototype.simplePostRequest = function (url, model) {
         var _this = this;
-        return this.http.post(url, model, { headers: this.headers })
+        var headers = new http_1.Headers();
+        headers.append('Content-Type', 'application/json');
+        return this.http.post(url, model, { headers: headers })
             .map(function (res) { return _this.extractData(res); })
             .catch(this.handleError);
     };

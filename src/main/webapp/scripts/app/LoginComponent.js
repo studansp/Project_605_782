@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("@angular/core");
 var ApiService_1 = require("./ApiService");
 var LoginModel_1 = require("./models/LoginModel");
-var ApiResponse_1 = require("./models/ApiResponse");
 var LoginComponent = (function () {
     function LoginComponent(apiService) {
         this.apiService = apiService;
@@ -23,7 +22,7 @@ var LoginComponent = (function () {
             .subscribe(function (m) { return _this.handleResponse(m); }, function (e) { alert(e); });
     };
     LoginComponent.prototype.handleResponse = function (loginResponse) {
-        if (loginResponse.status == ApiResponse_1.ApiResponse.OK) {
+        if (loginResponse.model != null) {
             alert("Success: " + loginResponse.model);
         }
         else {
