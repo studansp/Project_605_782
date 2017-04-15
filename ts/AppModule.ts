@@ -7,16 +7,22 @@ import { AppComponent }  from './AppComponent';
 import {LoginComponent} from "./LoginComponent";
 import {HomeComponent} from "./HomeComponent";
 import {ApiService} from "./ApiService";
+import {EventsComponent} from "./EventsComponent";
+import {ProfileComponent} from "./ProfileComponent";
+import {CartComponent} from "./CartComponent";
 
 const appRoutes: Routes = [
+    { path: 'home', component: HomeComponent },
     { path: 'login', component: LoginComponent },
-    { path: '', component: HomeComponent },
-    { path: 'home', component: HomeComponent }
+    { path: 'events', component: EventsComponent },
+    { path: 'profile', component: ProfileComponent },
+    { path: 'cart', component: CartComponent },
+    { path: '', redirectTo: '/home', pathMatch: 'full'}
 ];
 
 @NgModule({
     imports:      [ BrowserModule, FormsModule, HttpModule, JsonpModule, RouterModule.forRoot(appRoutes) ],
-    declarations: [ AppComponent, LoginComponent, HomeComponent ],
+    declarations: [ AppComponent, LoginComponent, HomeComponent, EventsComponent, ProfileComponent, CartComponent ],
     bootstrap:    [ AppComponent ],
     providers: [ ApiService ]
 })

@@ -11,9 +11,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("@angular/core");
 var ApiService_1 = require("./ApiService");
 var LoginModel_1 = require("./models/LoginModel");
+var router_1 = require("@angular/router");
 var LoginComponent = (function () {
-    function LoginComponent(apiService) {
+    function LoginComponent(apiService, router) {
         this.apiService = apiService;
+        this.router = router;
+        apiService.clearToken();
         this.model = new LoginModel_1.LoginModel();
     }
     LoginComponent.prototype.onSubmit = function () {
@@ -23,7 +26,8 @@ var LoginComponent = (function () {
     };
     LoginComponent.prototype.handleResponse = function (loginResponse) {
         if (loginResponse.model != null) {
-            alert("Success: " + loginResponse.model);
+            this.apiService.setToken(loginResponse.model);
+            this.router.navigateByUrl("/home");
         }
         else {
             alert("Invalid username or password");
@@ -36,7 +40,7 @@ LoginComponent = __decorate([
         selector: 'login',
         templateUrl: './templates/login.html'
     }),
-    __metadata("design:paramtypes", [ApiService_1.ApiService])
+    __metadata("design:paramtypes", [ApiService_1.ApiService, router_1.Router])
 ], LoginComponent);
 exports.LoginComponent = LoginComponent;
 //# sourceMappingURL=LoginComponent.js.map

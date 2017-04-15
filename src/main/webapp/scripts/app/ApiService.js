@@ -18,6 +18,15 @@ var ApiService = (function () {
     function ApiService(http) {
         this.http = http;
     }
+    ApiService.prototype.setToken = function (newToken) {
+        this.token = newToken;
+    };
+    ApiService.prototype.clearToken = function () {
+        this.token = null;
+    };
+    ApiService.prototype.isAuthenticated = function () {
+        return this.token != null;
+    };
     ApiService.prototype.authenicate = function (model) {
         return this.simplePostRequest("/authenticate", model);
     };

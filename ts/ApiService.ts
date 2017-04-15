@@ -10,6 +10,20 @@ import {ApiResponse} from "./models/ApiResponse";
 export class ApiService {
     constructor (private http: Http) {}
 
+    private token:string;
+
+    public setToken(newToken:string) {
+        this.token=newToken;
+    }
+
+    public clearToken():void {
+        this.token=null;
+    }
+
+    public isAuthenticated():boolean {
+        return this.token!=null;
+    }
+
     public authenicate(model:LoginModel):Observable<ApiResponse<string>> {
         return this.simplePostRequest<string>("/authenticate", model);
     }
