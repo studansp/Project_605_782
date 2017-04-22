@@ -10,6 +10,8 @@ import {ApiService} from "./ApiService";
 import {EventsComponent} from "./EventsComponent";
 import {ProfileComponent} from "./ProfileComponent";
 import {CartComponent} from "./CartComponent";
+import {CreateAccountComponent} from "./CreateAccountComponent";
+import {EventDetailComponent} from "./EventDetailComponent";
 
 const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -17,12 +19,14 @@ const appRoutes: Routes = [
     { path: 'events', component: EventsComponent },
     { path: 'profile', component: ProfileComponent },
     { path: 'cart', component: CartComponent },
+    { path: 'createaccount', component: CreateAccountComponent },
+    { path: 'eventdetail/:id', component: EventDetailComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full'}
 ];
 
 @NgModule({
     imports:      [ BrowserModule, FormsModule, HttpModule, JsonpModule, RouterModule.forRoot(appRoutes) ],
-    declarations: [ AppComponent, LoginComponent, HomeComponent, EventsComponent, ProfileComponent, CartComponent ],
+    declarations: [ AppComponent, LoginComponent, HomeComponent, EventsComponent, ProfileComponent, CartComponent, CreateAccountComponent, EventDetailComponent ],
     bootstrap:    [ AppComponent ],
     providers: [ ApiService ]
 })

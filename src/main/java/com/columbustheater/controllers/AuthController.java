@@ -15,9 +15,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 public class AuthController extends ControllerBase {
@@ -31,11 +34,12 @@ public class AuthController extends ControllerBase {
 
         CriteriaQuery<Account> accountCriteriaQuery = builder.createQuery(Account.class);
         Root<Account> root = accountCriteriaQuery.from(Account.class);
+        List<Predicate> predicates = new ArrayList<>();
 
-        accountCriteriaQuery.where(builder.equal(root.get("username"), login.getUsername()));
-        accountCriteriaQuery.where(builder.equal(root.get("password"), login.getPassword()));
+        predicates.add(builder.equal(root.get("username"), login.getUsername()));
+        predicates.add(builder.equal(root.get("password"), login.getPassword()));
 
-        accountCriteriaQuery.select(root);
+        accountCriteriaQuery.select(root).where(predicates.toArray(new Predicate[]{}));
 
         try {
             Account result = em.createQuery( accountCriteriaQuery ).getSingleResult();

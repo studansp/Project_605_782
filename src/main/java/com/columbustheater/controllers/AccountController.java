@@ -51,8 +51,7 @@ public class AccountController extends ControllerBase {
         context.getSession().save(currentAccount);
         em.getTransaction().commit();
 
-        //TODO Save model
-        return null;
+        return new Response<>(currentAccount);
     }
 
     @RequestMapping(path=path, method = RequestMethod.GET)

@@ -1,1 +1,14 @@
 <h1>Events</h1>
+<table>
+    <tr>
+        <th>Date</th>
+        <th>Event</th>
+        <th></th>
+    </tr>
+
+    <tr *ngFor="let event of events; let i = index;">
+        <td>{{event.date | date: 'MM/dd/yyyy'}}</td>
+        <td>{{event.name}}</td>
+        <td><a routerLink="/eventdetail/{{event.id}}">Buy Now</a></td>
+    </tr>
+</table>

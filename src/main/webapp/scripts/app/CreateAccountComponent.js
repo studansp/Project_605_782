@@ -12,40 +12,33 @@ var core_1 = require("@angular/core");
 var AccountModel_1 = require("./models/AccountModel");
 var ApiService_1 = require("./ApiService");
 var router_1 = require("@angular/router");
-var ProfileComponent = (function () {
-    function ProfileComponent(apiService, router) {
-        var _this = this;
+var CreateAccountComponent = (function () {
+    function CreateAccountComponent(apiService, router) {
         this.apiService = apiService;
+        this.router = router;
         this.model = new AccountModel_1.AccountModel();
-        if (apiService.isAuthenticated() == false) {
-            router.navigateByUrl('/login');
-        }
-        else {
-            apiService.getProfile()
-                .subscribe(function (m) { _this.model = m.model; }, function (e) { router.navigateByUrl('/login'); });
-        }
     }
-    ProfileComponent.prototype.updateProfile = function () {
+    CreateAccountComponent.prototype.createAccount = function () {
         var _this = this;
-        this.apiService.updateProfile(this.model)
+        this.apiService.createAccount(this.model)
             .subscribe(function (m) { return _this.handleResponse(m); }, function (e) { alert(e); });
     };
-    ProfileComponent.prototype.handleResponse = function (response) {
+    CreateAccountComponent.prototype.handleResponse = function (response) {
         if (response.model != null) {
-            this.model = response.model;
+            this.router.navigateByUrl('/login');
         }
         else {
             alert("Test error.");
         }
     };
-    return ProfileComponent;
+    return CreateAccountComponent;
 }());
-ProfileComponent = __decorate([
+CreateAccountComponent = __decorate([
     core_1.Component({
-        selector: 'profile',
-        templateUrl: './templates/profile.html'
+        selector: 'createaccount',
+        templateUrl: './templates/createaccount.html'
     }),
     __metadata("design:paramtypes", [ApiService_1.ApiService, router_1.Router])
-], ProfileComponent);
-exports.ProfileComponent = ProfileComponent;
-//# sourceMappingURL=ProfileComponent.js.map
+], CreateAccountComponent);
+exports.CreateAccountComponent = CreateAccountComponent;
+//# sourceMappingURL=CreateAccountComponent.js.map

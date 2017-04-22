@@ -30,6 +30,21 @@ var ApiService = (function () {
     ApiService.prototype.authenicate = function (model) {
         return this.simplePostRequest("/authenticate", model);
     };
+    ApiService.prototype.getEvent = function (id) {
+        return this.simpleGetRequest("/event?id=" + id);
+    };
+    ApiService.prototype.getEvents = function () {
+        return this.simpleGetRequest("/events");
+    };
+    ApiService.prototype.getProfile = function () {
+        return this.simpleGetRequest("/account");
+    };
+    ApiService.prototype.createAccount = function (model) {
+        return this.simplePostRequest("/account", model);
+    };
+    ApiService.prototype.updateProfile = function (model) {
+        return this.simplePutRequest("/account", model);
+    };
     ApiService.prototype.extractData = function (res) {
         var result = new ApiResponse_1.ApiResponse();
         result.deserialize(res.json());
@@ -49,11 +64,29 @@ var ApiService = (function () {
         console.error(errMsg);
         return Observable_1.Observable.throw(errMsg);
     };
-    ApiService.prototype.simplePostRequest = function (url, model) {
-        var _this = this;
+    ApiService.prototype.getHeaders = function () {
         var headers = new http_1.Headers();
         headers.append('Content-Type', 'application/json');
-        return this.http.post(url, model, { headers: headers })
+        if (this.isAuthenticated()) {
+            headers.append('Authorization', this.token);
+        }
+        return headers;
+    };
+    ApiService.prototype.simpleGetRequest = function (url) {
+        var _this = this;
+        return this.http.get(url, { headers: this.getHeaders() })
+            .map(function (res) { return _this.extractData(res); })
+            .catch(this.handleError);
+    };
+    ApiService.prototype.simplePutRequest = function (url, model) {
+        var _this = this;
+        return this.http.put(url, model, { headers: this.getHeaders() })
+            .map(function (res) { return _this.extractData(res); })
+            .catch(this.handleError);
+    };
+    ApiService.prototype.simplePostRequest = function (url, model) {
+        var _this = this;
+        return this.http.post(url, model, { headers: this.getHeaders() })
             .map(function (res) { return _this.extractData(res); })
             .catch(this.handleError);
     };

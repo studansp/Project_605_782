@@ -27,6 +27,5 @@ export class LoginComponent {
         } else {
             alert("Invalid username or password");
         }
-
     }
 }
