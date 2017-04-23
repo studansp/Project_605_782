@@ -30,6 +30,9 @@ var ApiService = (function () {
     ApiService.prototype.authenicate = function (model) {
         return this.simplePostRequest("/authenticate", model);
     };
+    ApiService.prototype.addToCart = function (request) {
+        return this.simplePostRequest("/cartitem", request);
+    };
     ApiService.prototype.getEvent = function (id) {
         return this.simpleGetRequest("/event?id=" + id);
     };

@@ -29,4 +29,14 @@ public class Order extends ModelBase {
     public void setTickets(List<Ticket> tickets) {
         this.tickets = tickets;
     }
+
+    private boolean ordered;
+
+    public boolean isOrdered() {
+        return ordered;
+    }
+
+    public void setOrdered(boolean ordered) {
+        this.ordered = ordered;
+    }
 }

@@ -1,8 +1,5 @@
 package com.columbustheater.viewmodels;
 
-/**
- * Created by Phillip on 4/2/2017.
- */
 public class Login {
     private String username;
     private String password;

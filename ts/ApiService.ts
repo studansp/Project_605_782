@@ -7,6 +7,8 @@ import 'rxjs/add/operator/map';
 import {ApiResponse} from "./models/ApiResponse";
 import {AccountModel} from "./models/AccountModel";
 import {EventModel} from "./models/EventModel";
+import {CartItemRequest} from "./models/CartItemRequest";
+import {TicketModel} from "./models/TicketModel";
 
 @Injectable()
 export class ApiService {
@@ -28,6 +30,10 @@ export class ApiService {
 
     public authenicate(model:LoginModel):Observable<ApiResponse<string>> {
         return this.simplePostRequest<string>("/authenticate", model);
+    }
+
+    public addToCart(request:CartItemRequest):Observable<ApiResponse<boolean>> {
+        return this.simplePostRequest<boolean>("/cartitem", request);
     }
 
     public getEvent(id:number):Observable<ApiResponse<EventModel>> {

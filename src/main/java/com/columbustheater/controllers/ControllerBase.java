@@ -4,12 +4,17 @@ import com.columbustheater.data.Application;
 import com.columbustheater.data.DataContext;
 import com.columbustheater.data.DataContextFactory;
 import com.columbustheater.models.Account;
+import com.columbustheater.models.Order;
 import io.jsonwebtoken.Jwts;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ControllerBase {
     protected final String NotAuthorizedMessage = "You are not authorized to perform that action. Please login and try again.";
@@ -20,7 +25,11 @@ public class ControllerBase {
     private DataContext dataContext;
 
     protected DataContext getDataContext() {
-        if(dataContext==null) {
+        return getDataContext(false);
+    }
+
+    protected DataContext getDataContext(boolean createNew) {
+        if(createNew || dataContext==null) {
             DataContextFactory factory = Application.getFactory();
             dataContext = factory.createDataContext();
         }
@@ -56,4 +65,38 @@ public class ControllerBase {
             return null;
         }
     }
+
+    protected Order getOrder(String authHeader) {
+        Order result;
+
+        Account account = getAccount(authHeader);
+
+        DataContext context = getDataContext();
+        EntityManager em = context.getEntityManager();
+        CriteriaBuilder builder = context.getCriteriaBuilder();
+
+        CriteriaQuery<Order> orderCriteriaQuery = builder.createQuery(Order.class);
+        Root<Order> root = orderCriteriaQuery.from(Order.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        predicates.add(builder.equal(root.get("account"), account));
+        predicates.add(builder.equal(root.get("ordered"), false));
+
+        orderCriteriaQuery.select(root).where(predicates.toArray(new Predicate[]{}));
+
+        try {
+            result = em.createQuery( orderCriteriaQuery ).getSingleResult();
+
+        } catch(NoResultException ex) {
+            result = new Order();
+            result.setAccount(account);
+
+            em.getTransaction().begin();
+            em.persist(result);
+            em.getTransaction().commit();
+        }
+
+        return result;
+    }
+
 }

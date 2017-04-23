@@ -12,12 +12,14 @@ var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
 var ApiService_1 = require("./ApiService");
 var EventModel_1 = require("./models/EventModel");
+var CartItemRequest_1 = require("./models/CartItemRequest");
 var EventDetailComponent = (function () {
     function EventDetailComponent(route, apiService, router) {
         this.route = route;
         this.apiService = apiService;
         this.router = router;
         this.event = new EventModel_1.EventModel();
+        this.quantity = 2;
     }
     EventDetailComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -27,6 +29,21 @@ var EventDetailComponent = (function () {
                 _this.event = m.model;
             }, function (e) { _this.router.navigateByUrl("/home"); });
         });
+    };
+    EventDetailComponent.prototype.addQuantityToCart = function () {
+        var _this = this;
+        if (this.apiService.isAuthenticated()) {
+            var request = new CartItemRequest_1.CartItemRequest();
+            request.quantity = this.quantity;
+            request.eventId = this.event.id;
+            this.apiService.addToCart(request)
+                .subscribe(function (m) {
+                _this.router.navigateByUrl("/cart");
+            }, function (e) { alert('error'); });
+        }
+        else {
+            this.router.navigateByUrl('/login');
+        }
     };
     return EventDetailComponent;
 }());
