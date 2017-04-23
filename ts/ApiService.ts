@@ -9,6 +9,7 @@ import {AccountModel} from "./models/AccountModel";
 import {EventModel} from "./models/EventModel";
 import {CartItemRequest} from "./models/CartItemRequest";
 import {TicketModel} from "./models/TicketModel";
+import {OrderModel} from "./models/OrderModel";
 
 @Injectable()
 export class ApiService {
@@ -34,6 +35,10 @@ export class ApiService {
 
     public addToCart(request:CartItemRequest):Observable<ApiResponse<boolean>> {
         return this.simplePostRequest<boolean>("/cartitem", request);
+    }
+
+    public getCart():Observable<ApiResponse<OrderModel>> {
+        return this.simpleGetRequest<OrderModel>("/cart");
     }
 
     public getEvent(id:number):Observable<ApiResponse<EventModel>> {

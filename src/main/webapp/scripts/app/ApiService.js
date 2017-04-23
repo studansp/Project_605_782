@@ -33,6 +33,9 @@ var ApiService = (function () {
     ApiService.prototype.addToCart = function (request) {
         return this.simplePostRequest("/cartitem", request);
     };
+    ApiService.prototype.getCart = function () {
+        return this.simpleGetRequest("/cart");
+    };
     ApiService.prototype.getEvent = function (id) {
         return this.simpleGetRequest("/event?id=" + id);
     };

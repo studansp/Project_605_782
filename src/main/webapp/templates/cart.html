@@ -1,1 +1,14 @@
 <h1>Cart</h1>
+
+<div *ngFor="let line of model.lines;">
+    Event: {{line.event.name}}
+    <br />
+    Date: {{line.event.date | date: 'MM/dd/yyyy'}}
+    <br />
+
+    <div *ngFor="let ticket of line.tickets;">
+        Section: {{ticket.section}}
+        Row: {{ticket.row}}
+        Seat: {{ticket.seat}}
+    </div>
+</div>
