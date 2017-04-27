@@ -12,6 +12,7 @@ import {ProfileComponent} from "./ProfileComponent";
 import {CartComponent} from "./CartComponent";
 import {CreateAccountComponent} from "./CreateAccountComponent";
 import {EventDetailComponent} from "./EventDetailComponent";
+import {ChooseYourSeatsComponent} from "./ChooseYourSeatsComponent";
 
 const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -26,7 +27,7 @@ const appRoutes: Routes = [
 
 @NgModule({
     imports:      [ BrowserModule, FormsModule, HttpModule, JsonpModule, RouterModule.forRoot(appRoutes) ],
-    declarations: [ AppComponent, LoginComponent, HomeComponent, EventsComponent, ProfileComponent, CartComponent, CreateAccountComponent, EventDetailComponent ],
+    declarations: [ AppComponent, LoginComponent, HomeComponent, EventsComponent, ProfileComponent, CartComponent, CreateAccountComponent, EventDetailComponent, ChooseYourSeatsComponent ],
     bootstrap:    [ AppComponent ],
     providers: [ ApiService ]
 })
