@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class OrderController extends ControllerBase {
-    private static final String path = "/order";
+    private static final String path = "/api/order";
 
     @RequestMapping(path=path, method = RequestMethod.POST)
     @ResponseBody

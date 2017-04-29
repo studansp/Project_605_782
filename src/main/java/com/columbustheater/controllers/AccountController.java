@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 public class AccountController extends ControllerBase {
-    private static final String path="/account";
+    private static final String path="/api/account";
 
     @RequestMapping(path=path, method = RequestMethod.POST)
     @ResponseBody

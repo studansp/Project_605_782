@@ -25,7 +25,7 @@ import java.util.List;
 @RestController
 public class AuthController extends ControllerBase {
 
-    @RequestMapping(path="/authenticate")
+    @RequestMapping(path="/api/authenticate")
     @ResponseBody
     public Response<String> authenticate(@RequestBody Login login) {
         DataContext context = getDataContext();

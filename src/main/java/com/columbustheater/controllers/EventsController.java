@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 public class EventsController extends ControllerBase {
 
-    @RequestMapping(path="/events", method = RequestMethod.GET)
+    @RequestMapping(path="/api/events", method = RequestMethod.GET)
     @ResponseBody
     public Response<List<Event>> get() {
         DataContext context = getDataContext();

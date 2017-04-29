@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 public class CartItemController extends ControllerBase {
-    private static final String path = "/cartitem";
+    private static final String path = "/api/cartitem";
 
     @RequestMapping(path=path, method = RequestMethod.POST)
     @ResponseBody

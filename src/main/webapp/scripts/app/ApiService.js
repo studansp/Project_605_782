@@ -28,28 +28,28 @@ var ApiService = (function () {
         return this.token != null;
     };
     ApiService.prototype.authenicate = function (model) {
-        return this.simplePostRequest("/authenticate", model);
+        return this.simplePostRequest("/api/authenticate", model);
     };
     ApiService.prototype.addToCart = function (request) {
-        return this.simplePostRequest("/cartitem", request);
+        return this.simplePostRequest("/api/cartitem", request);
     };
     ApiService.prototype.getCart = function () {
-        return this.simpleGetRequest("/cart");
+        return this.simpleGetRequest("/api/cart");
     };
     ApiService.prototype.getEvent = function (id) {
-        return this.simpleGetRequest("/event?id=" + id);
+        return this.simpleGetRequest("/api/event?id=" + id);
     };
     ApiService.prototype.getEvents = function () {
-        return this.simpleGetRequest("/events");
+        return this.simpleGetRequest("/api/events");
     };
     ApiService.prototype.getProfile = function () {
-        return this.simpleGetRequest("/account");
+        return this.simpleGetRequest("/api/account");
     };
     ApiService.prototype.createAccount = function (model) {
-        return this.simplePostRequest("/account", model);
+        return this.simplePostRequest("/api/account", model);
     };
     ApiService.prototype.updateProfile = function (model) {
-        return this.simplePutRequest("/account", model);
+        return this.simplePutRequest("/api/account", model);
     };
     ApiService.prototype.extractData = function (res) {
         var result = new ApiResponse_1.ApiResponse();

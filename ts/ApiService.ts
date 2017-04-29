@@ -30,35 +30,35 @@ export class ApiService {
     }
 
     public authenicate(model:LoginModel):Observable<ApiResponse<string>> {
-        return this.simplePostRequest<string>("/authenticate", model);
+        return this.simplePostRequest<string>("/api/authenticate", model);
     }
 
     public addToCart(request:CartItemRequest):Observable<ApiResponse<boolean>> {
-        return this.simplePostRequest<boolean>("/cartitem", request);
+        return this.simplePostRequest<boolean>("/api/cartitem", request);
     }
 
     public getCart():Observable<ApiResponse<OrderModel>> {
-        return this.simpleGetRequest<OrderModel>("/cart");
+        return this.simpleGetRequest<OrderModel>("/api/cart");
     }
 
     public getEvent(id:number):Observable<ApiResponse<EventModel>> {
-        return this.simpleGetRequest<EventModel>("/event?id="+id);
+        return this.simpleGetRequest<EventModel>("/api/event?id="+id);
     }
 
     public getEvents():Observable<ApiResponse<Array<EventModel>>> {
-        return this.simpleGetRequest<Array<EventModel>>("/events");
+        return this.simpleGetRequest<Array<EventModel>>("/api/events");
     }
 
     public getProfile():Observable<ApiResponse<AccountModel>> {
-        return this.simpleGetRequest<AccountModel>("/account");
+        return this.simpleGetRequest<AccountModel>("/api/account");
     }
 
     public createAccount(model:AccountModel):Observable<ApiResponse<AccountModel>> {
-        return this.simplePostRequest<AccountModel>("/account", model);
+        return this.simplePostRequest<AccountModel>("/api/account", model);
     }
 
     public updateProfile(model:AccountModel):Observable<ApiResponse<AccountModel>> {
-        return this.simplePutRequest<AccountModel>("/account", model);
+        return this.simplePutRequest<AccountModel>("/api/account", model);
     }
 
     private extractData<T>(res: Response):ApiResponse<T> {

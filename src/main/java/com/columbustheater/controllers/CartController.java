@@ -16,7 +16,7 @@ import java.util.Map;
 
 @RestController
 public class CartController extends ControllerBase {
-    @RequestMapping(path="/cart", method = RequestMethod.GET)
+    @RequestMapping(path="/api/cart", method = RequestMethod.GET)
     @ResponseBody
     public Response<OrderModel> get(@RequestHeader(value=AuthHeader) String authHeader) {
         OrderModel model = new OrderModel();

@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 public class EventController extends ControllerBase {
-    @RequestMapping(path="/event", method = RequestMethod.GET)
+    @RequestMapping(path="/api/event", method = RequestMethod.GET)
     @ResponseBody
     public Response<Event> get(@RequestParam(value="id") int id) {
         DataContext context = getDataContext();
