@@ -1,11 +1,13 @@
 package com.columbustheater.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name="tickets")
 public class Ticket extends ModelBase {
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "seatId")
     private Seat seat;
 
@@ -16,6 +18,10 @@ public class Ticket extends ModelBase {
     @ManyToOne
     @JoinColumn(name = "orderId")
     private Order order;
+
+    @Column(nullable= false)
+    @Digits(integer=12, fraction=2)
+    private BigDecimal cost;
 
     public Seat getSeat() {
         return seat;
@@ -39,5 +45,13 @@ public class Ticket extends ModelBase {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public BigDecimal getCost() {
+        return cost;
+    }
+
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
     }
 }

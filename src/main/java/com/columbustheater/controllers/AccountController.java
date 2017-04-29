@@ -3,9 +3,11 @@ package com.columbustheater.controllers;
 import com.columbustheater.data.DataContext;
 import com.columbustheater.models.Account;
 import com.columbustheater.viewmodels.Response;
+import org.hibernate.Transaction;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
@@ -21,9 +23,16 @@ public class AccountController extends ControllerBase {
         DataContext context = getDataContext();
         EntityManager em = context.getEntityManager();
 
-        em.getTransaction().begin();
-        em.persist(account);
-        em.getTransaction().commit();
+        try {
+            em.getTransaction().begin();
+            em.persist(account);
+            em.getTransaction().commit();
+
+        } catch (Exception ex) {
+            EntityTransaction tran = em.getTransaction();
+            if(tran.isActive())
+                tran.rollback();
+        }
 
         return new Response<>(account);
     }

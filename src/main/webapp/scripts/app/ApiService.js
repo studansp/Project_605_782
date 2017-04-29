@@ -51,6 +51,9 @@ var ApiService = (function () {
     ApiService.prototype.updateProfile = function (model) {
         return this.simplePutRequest("/api/account", model);
     };
+    ApiService.prototype.placeOrder = function () {
+        return this.simplePostRequest("/api/order", {});
+    };
     ApiService.prototype.extractData = function (res) {
         var result = new ApiResponse_1.ApiResponse();
         result.deserialize(res.json());

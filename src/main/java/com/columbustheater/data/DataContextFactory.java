@@ -11,12 +11,17 @@ import javax.persistence.EntityManager;
  * Created by Phillip on 4/2/2017.
  */
 public class DataContextFactory {
+    private static SessionFactory sessionFactory;
+
     public DataContext createDataContext() {
         Configuration cfg = createConfiguration();
-        SessionFactory sessions = cfg.buildSessionFactory();
-        EntityManager entityManager = sessions.createEntityManager();
 
-        Session session = sessions.openSession();
+        if(sessionFactory==null)
+            sessionFactory = cfg.buildSessionFactory();
+
+        EntityManager entityManager = sessionFactory.createEntityManager();
+
+        Session session = sessionFactory.openSession();
         DataContext context = new DataContext(session, entityManager);
 
         return context;

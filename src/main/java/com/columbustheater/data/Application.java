@@ -10,6 +10,8 @@ import org.springframework.context.annotation.ComponentScan;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import java.math.BigDecimal;
+import java.util.Currency;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -121,6 +123,8 @@ public class Application extends SpringBootServletInitializer {
                 Ticket eventTicket = new Ticket();
                 eventTicket.setEvent(event);
                 eventTicket.setSeat(eventSeat);
+                BigDecimal cost = new BigDecimal(10);
+                eventTicket.setCost(cost);
                 em.persist(eventTicket);
             }
 

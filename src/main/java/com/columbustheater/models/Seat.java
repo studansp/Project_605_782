@@ -11,7 +11,7 @@ public class Seat extends ModelBase {
     @Column
     private int seat;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "sectionId")
     private Section section;
 

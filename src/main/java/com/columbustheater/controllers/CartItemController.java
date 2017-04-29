@@ -29,12 +29,11 @@ public class CartItemController extends ControllerBase {
         Response<Boolean> result = new Response<>();
 
         if(request.isOrderByQuantity()) {
-            String sql = "select seat.row from tickets ticket inner join seats seat " +
+            String sql = "select seat.row, seat.sectionId from tickets ticket inner join seats seat " +
                     "on ticket.seatId=seat.id where ticket.eventId="+request.getEventId()+" and orderId is null" +
-                    " group by seat.row having count(*)>="+request.getQuantity()+" LIMIT 1";
+                    " group by seat.row,seat.sectionId having count(*)>="+request.getQuantity()+" LIMIT 1";
 
             DataContext context = getDataContext(true);
-            EntityManager em = context.getEntityManager();
             Session session = context.getSession();
             session.beginTransaction();
             List validRowResult = session.createSQLQuery(sql).list();
@@ -42,10 +41,11 @@ public class CartItemController extends ControllerBase {
             if(validRowResult.isEmpty()) {
                 result.setMessage("The requested quantity is not available.");
             } else {
+                Object[] validArray = (Object[])validRowResult.get(0);
 
                 String updateSql = "update tickets ticket set ticket.orderId="+order.getId()+
                         " where ticket.id in (select id from (select ticket2.id from tickets ticket2 " +
-                        "inner join seats seat on seat.row="+validRowResult.get(0)+" where ticket2.eventId="+request.getEventId()+" LIMIT "+request.getQuantity()+") sub1 );";
+                        "inner join seats seat on seat.id=ticket2.seatId and seat.row="+validArray[0]+" and seat.sectionId="+validArray[1]+" where ticket2.orderId is null and ticket2.eventId="+request.getEventId()+" LIMIT "+request.getQuantity()+") sub1 );";
 
                 session.createSQLQuery(updateSql).executeUpdate();
                 result.setModel(true);

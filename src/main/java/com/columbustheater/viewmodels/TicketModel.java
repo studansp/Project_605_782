@@ -1,10 +1,13 @@
 package com.columbustheater.viewmodels;
 
+import java.math.BigDecimal;
+
 public class TicketModel {
     private long id;
     private String section;
     private String row;
     private String seat;
+    private BigDecimal cost;
 
     public long getId() {
         return id;
@@ -36,5 +39,13 @@ public class TicketModel {
 
     public void setSeat(String seat) {
         this.seat = seat;
+    }
+
+    public BigDecimal getCost() {
+        return cost;
+    }
+
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
     }
 }

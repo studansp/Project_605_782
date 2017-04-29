@@ -4,7 +4,12 @@ import com.columbustheater.data.Application;
 import com.columbustheater.data.DataContext;
 import com.columbustheater.data.DataContextFactory;
 import com.columbustheater.models.Account;
+import com.columbustheater.models.Event;
 import com.columbustheater.models.Order;
+import com.columbustheater.models.Ticket;
+import com.columbustheater.viewmodels.OrderLineModel;
+import com.columbustheater.viewmodels.OrderModel;
+import com.columbustheater.viewmodels.TicketModel;
 import io.jsonwebtoken.Jwts;
 
 import javax.persistence.EntityManager;
@@ -14,7 +19,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ControllerBase {
     protected final String NotAuthorizedMessage = "You are not authorized to perform that action. Please login and try again.";
@@ -67,6 +74,7 @@ public class ControllerBase {
     }
 
     protected Order getOrder(String authHeader) {
+        //TODO Ticket.Seat information not loading
         Order result;
 
         Account account = getAccount(authHeader);
@@ -86,7 +94,7 @@ public class ControllerBase {
 
         try {
             result = em.createQuery( orderCriteriaQuery ).getSingleResult();
-
+            em.refresh(result);
         } catch(NoResultException ex) {
             result = new Order();
             result.setAccount(account);
@@ -97,6 +105,49 @@ public class ControllerBase {
         }
 
         return result;
+    }
+
+
+
+    protected OrderModel mapOrderToOrderModel(Order order) {
+        OrderModel model = new OrderModel();
+
+        Map<Event,List<TicketModel>> eventMap = new HashMap<>();
+
+        for (Ticket ticket : order.getTickets()) {
+            TicketModel ticketModel = new TicketModel();
+            ticketModel.setId(ticket.getId());
+            ticketModel.setSection(ticket.getSeat().getSection().getName());
+            ticketModel.setRow(String.valueOf(ticket.getSeat().getRow()));
+            ticketModel.setSeat(String.valueOf(ticket.getSeat().getSeat()));
+            ticketModel.setCost(ticket.getCost());
+
+            if(eventMap.containsKey(ticket.getEvent())) {
+                eventMap.get(ticket.getEvent()).add(ticketModel);
+            } else {
+                List<TicketModel> eventList = new ArrayList<>();
+                eventList.add(ticketModel);
+
+                eventMap.put(ticket.getEvent(), eventList);
+            }
+        }
+
+        OrderLineModel[] lines = new OrderLineModel[eventMap.keySet().size()];
+        int i=0;
+
+        for (Event key:
+                eventMap.keySet()) {
+            OrderLineModel orderLineModel = new OrderLineModel();
+            orderLineModel.setEvent(key);
+            orderLineModel.setTickets(eventMap.get(key));
+            lines[i]=orderLineModel;
+            i++;
+        }
+
+
+        model.setLines(lines);
+
+        return model;
     }
 
 }

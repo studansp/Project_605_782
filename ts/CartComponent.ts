@@ -9,7 +9,10 @@ import {OrderLineModel} from "./models/OrderLineModel";
     templateUrl: './templates/cart.html'
 })
 export class CartComponent {
-    private model: OrderModel;
+    public model: OrderModel;
+    public isCheckingOut:boolean=false;
+    public isOrderComplete:boolean=false;
+    public title:String="Cart";
 
     constructor(private apiService:ApiService, router:Router) {
         this.model = new OrderModel();
@@ -20,5 +23,25 @@ export class CartComponent {
             apiService.getCart()
                 .subscribe(m => {this.model=m.model;}, e => { router.navigateByUrl('/login'); });
         }
+    }
+
+    public initCheckout():void{
+        this.isCheckingOut = true;
+        this.title = "Checkout";
+    }
+
+    public placeOrder():void {
+        this.title = "Order Complete";
+
+        this.apiService.placeOrder()
+            .subscribe(() => {
+                this.isOrderComplete=true;
+            }, e => { alert(e);});
+    }
+
+    public get emptyCart():boolean{
+        return this.model==null
+            || this.model.lines==null
+            || this.model.lines.length==0;
     }
 }

@@ -16,6 +16,9 @@ var CartComponent = (function () {
     function CartComponent(apiService, router) {
         var _this = this;
         this.apiService = apiService;
+        this.isCheckingOut = false;
+        this.isOrderComplete = false;
+        this.title = "Cart";
         this.model = new OrderModel_1.OrderModel();
         this.model.lines = new Array();
         if (apiService.isAuthenticated() == false) {
@@ -26,6 +29,27 @@ var CartComponent = (function () {
                 .subscribe(function (m) { _this.model = m.model; }, function (e) { router.navigateByUrl('/login'); });
         }
     }
+    CartComponent.prototype.initCheckout = function () {
+        this.isCheckingOut = true;
+        this.title = "Checkout";
+    };
+    CartComponent.prototype.placeOrder = function () {
+        var _this = this;
+        this.title = "Order Complete";
+        this.apiService.placeOrder()
+            .subscribe(function () {
+            _this.isOrderComplete = true;
+        }, function (e) { alert(e); });
+    };
+    Object.defineProperty(CartComponent.prototype, "emptyCart", {
+        get: function () {
+            return this.model == null
+                || this.model.lines == null
+                || this.model.lines.length == 0;
+        },
+        enumerable: true,
+        configurable: true
+    });
     return CartComponent;
 }());
 CartComponent = __decorate([

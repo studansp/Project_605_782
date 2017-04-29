@@ -2,6 +2,7 @@ package com.columbustheater.viewmodels;
 
 import com.columbustheater.models.Event;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public class OrderLineModel {

@@ -1,7 +1,12 @@
 package com.columbustheater.controllers;
 
+import com.columbustheater.data.DataContext;
+import com.columbustheater.models.Order;
+import com.columbustheater.viewmodels.OrderModel;
 import com.columbustheater.viewmodels.Response;
 import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.EntityManager;
 
 @RestController
 public class OrderController extends ControllerBase {
@@ -9,8 +14,17 @@ public class OrderController extends ControllerBase {
 
     @RequestMapping(path=path, method = RequestMethod.POST)
     @ResponseBody
-    public Response<String> create(@RequestBody Object order) {
-        return null;
+    public Response<OrderModel> create(@RequestHeader(value=AuthHeader) String authHeader) {
+        DataContext context = getDataContext();
+        EntityManager em = context.getEntityManager();
+
+        em.getTransaction().begin();
+        Order order = getOrder(authHeader);
+        order.setOrdered(true);
+        em.persist(order);
+        em.getTransaction().commit();
+
+        return new Response<>(mapOrderToOrderModel(order));
     }
 
     @RequestMapping(path=path, method = RequestMethod.GET)

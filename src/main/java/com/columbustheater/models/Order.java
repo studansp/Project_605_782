@@ -1,6 +1,7 @@
 package com.columbustheater.models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -11,7 +12,7 @@ public class Order extends ModelBase {
     @JoinColumn(name = "accountId")
     private Account account;
 
-    @OneToMany(mappedBy="id", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity=Ticket.class, mappedBy="order", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private List<Ticket> tickets;
 
     public Account getAccount() {
@@ -23,6 +24,9 @@ public class Order extends ModelBase {
     }
 
     public List<Ticket> getTickets() {
+        if(tickets==null)
+            return new ArrayList<>();
+
         return tickets;
     }
 

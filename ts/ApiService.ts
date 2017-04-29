@@ -61,6 +61,10 @@ export class ApiService {
         return this.simplePutRequest<AccountModel>("/api/account", model);
     }
 
+    public placeOrder():Observable<ApiResponse<OrderModel>> {
+        return this.simplePostRequest<OrderModel>("/api/order", {});
+    }
+
     private extractData<T>(res: Response):ApiResponse<T> {
         let result = new ApiResponse<T>();
         result.deserialize(res.json())
