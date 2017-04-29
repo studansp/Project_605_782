@@ -6,9 +6,9 @@ export class ApiResponse<T> {
 
     deserialize(input:any):ApiResponse<T> {
         if(input) {
-            this.status = input.status
-            this.message = input.message
-            this.model = input.model
+            this.status = input.status;
+            this.message = input.message;
+            this.model = input.model;
         }
 
         return this;

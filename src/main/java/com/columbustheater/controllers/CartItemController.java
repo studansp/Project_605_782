@@ -28,14 +28,14 @@ public class CartItemController extends ControllerBase {
         Order order = getOrder(authHeader);
         Response<Boolean> result = new Response<>();
 
+        DataContext context = getDataContext(true);
+        Session session = context.getSession();
+        session.getTransaction().begin();
+
         if(request.isOrderByQuantity()) {
             String sql = "select seat.row, seat.sectionId from tickets ticket inner join seats seat " +
                     "on ticket.seatId=seat.id where ticket.eventId="+request.getEventId()+" and orderId is null" +
                     " group by seat.row,seat.sectionId having count(*)>="+request.getQuantity()+" LIMIT 1";
-
-            DataContext context = getDataContext(true);
-            Session session = context.getSession();
-            session.beginTransaction();
             List validRowResult = session.createSQLQuery(sql).list();
 
             if(validRowResult.isEmpty()) {
@@ -50,14 +50,45 @@ public class CartItemController extends ControllerBase {
                 session.createSQLQuery(updateSql).executeUpdate();
                 result.setModel(true);
             }
+        } else {
+            EntityManager em = context.getEntityManager();
+            CriteriaBuilder builder = context.getCriteriaBuilder();
 
-            session.getTransaction().commit();
-            session.close();
-        } else{
-            //TODO Seat selector
-            result = new Response<>();
-            result.setMessage("TODO");
+            CriteriaQuery<Ticket> ticketCriteriaQuery = builder.createQuery(Ticket.class);
+            Root<Ticket> root = ticketCriteriaQuery.from(Ticket.class);
+            Predicate[] orPredicates = new Predicate[request.getTickets().length];
+
+            List<Predicate> predicates = new ArrayList<>();
+
+            for (int i=0;i<request.getTickets().length;i++) {
+                orPredicates[i] = builder.equal(root.get("id"), request.getTickets()[i].getId());
+            }
+
+            predicates.add(builder.or(orPredicates));
+
+            ticketCriteriaQuery.select(root).where(predicates.toArray(new Predicate[]{}));
+            List<Ticket> ticketResult = em.createQuery(ticketCriteriaQuery).getResultList();
+            em.refresh(order);
+
+            for (Ticket ticket : ticketResult) {
+                if (ticket.getOrder() != null) {
+                    result.setMessage("The tickets you requested are no longer available");
+
+                    session.getTransaction().rollback();
+                    session.close();
+                    return result;
+                }
+
+                ticket.setOrder(order);
+            }
+
+            for (Ticket ticket : ticketResult) {
+                session.save(ticket);
+            }
         }
+
+        session.getTransaction().commit();
+        session.close();
 
         return result;
     }

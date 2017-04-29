@@ -1,10 +1,14 @@
 import {Component} from "@angular/core";
-import {Section} from "./chooseseats/Section";
 import {Seat} from "./chooseseats/Seat";
 import {MouseHandler} from "./chooseseats/MouseHandler";
 import {ContextContainer} from "./chooseseats/ContextContainer";
 import {IContains} from "./chooseseats/IContains";
 import {IDrawable} from "./chooseseats/IDrawable";
+import {ApiService} from "./ApiService";
+import {SectionModel} from "./models/SectionModel";
+import {CartItemRequest} from "./models/CartItemRequest";
+import {TicketModel} from "./models/TicketModel";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'chooseyourseats',
@@ -12,23 +16,37 @@ import {IDrawable} from "./chooseseats/IDrawable";
 })
 
 export class ChooseYourSeatsComponent {
-    private sections: Section[];
-    private selectedSection: Section;
-    private seats: Seat[];
+    private sections: SectionModel[] = [];
+    public eventId:number;
+    private selectedSection: SectionModel;
+    private seats: Seat[] = [];
     private canvas: HTMLCanvasElement;
     private ctx: ContextContainer;
     private canvasId = "seatsCanvas";
     private mouseHandler: MouseHandler;
     private selectedSeats: Set<Seat> = new Set<Seat>();
 
+    constructor(private apiService:ApiService, private router:Router) {
+    }
+
     ngOnInit() {
-        this.sections = this.getSections();
         this.canvas = <HTMLCanvasElement>(document.getElementById(this.canvasId));
         this.ctx = new ContextContainer(this.canvas.getContext("2d"));
 
         this.mouseHandler = new MouseHandler(this.canvas, (ev: PointerEvent) => this.handleCanvasClick(ev));
 
-        this.start();
+        this.apiService.getSections()
+            .subscribe(m => {
+                for(var i=0;i<m.model.length;i++) {
+                    var section:SectionModel = new SectionModel();
+                    section.name = m.model[i].name;
+                    section.id = m.model[i].id;
+                    section.priority = i+1;
+                    this.sections.push(section);
+                }
+
+                this.start();
+            }, e => {alert('Unable to retrieve sections.'); });
     }
 
     public start(): void {
@@ -133,49 +151,46 @@ export class ChooseYourSeatsComponent {
         this.drawOverlay();
     }
 
-    private fillSeats(): void {
-        this.seats = this.getSeatsForSection(this.selectedSection.id);
-    }
+    public addToCart():void {
+        if(this.selectedSeats.size==0) {
+            alert('You must select at least one seat');
+        } else {
+            var request = new CartItemRequest();
+            var tickets = new Array<TicketModel>();
 
-    private getSeatsForSection(id: number): Seat[] {
-        var rows = 50;
-        var columns = 50;
-        var currentId = 1;
+            this.selectedSeats.forEach(function(seat){
+                var ticket:TicketModel = new TicketModel();
+                ticket.id = seat.id;
+                tickets.push(ticket);
+            });
 
-        var seats = new Array<Seat>(rows * columns);
+            request.tickets = tickets;
 
-        for (var row = 0; row < rows; row++) {
-            for (var column = 0; column < columns; column++) {
-                var currentSeat = new Seat();
-                currentSeat.id = currentId++;
-                currentSeat.row = row;
-                currentSeat.column = column;
-                seats[column + columns * row] = currentSeat;
-            }
+            this.apiService.addToCart(request)
+                .subscribe(m => {
+                    this.router.navigateByUrl("/cart");
+                }, e => { alert('error'); });
         }
-
-        return seats;
     }
 
-    private getSections(): Section[] {
-        var section1 = new Section();
+    private fillSeats(): void {
+        while(this.seats.length!=0)
+            this.seats.pop()
 
-        section1.id = 1;
-        section1.name = "Section 1";
-        section1.priority = 1;
+        this.apiService.getSeatsForSection(this.selectedSection.id, this.eventId)
+            .subscribe(m => {
+                for(var i=0;i<m.model.length;i++) {
+                    var seat:Seat = new Seat();
+                    seat.id=m.model[i].id;
+                    seat.row=m.model[i].row;
+                    seat.seat=m.model[i].seat;
+                    seat.available=m.model[i].available;
 
-        var section2 = new Section();
+                    this.seats.push(seat);
+                }
 
-        section2.id = 2;
-        section2.name = "Section 2";
-        section2.priority = 2;
 
-        var section3 = new Section();
 
-        section3.id = 3;
-        section3.name = "Section 3";
-        section3.priority = 3;
-
-        return [section1, section2, section3];
+            }, e => {alert('Unable to retrieve seats.'); });
     }
 }

@@ -1,13 +1,10 @@
-import {IDrawable} from "./IDrawable";
-import {IContains} from "./IContains";
-import {Seat} from "./Seat";
-import {ContextContainer} from "./ContextContainer";
-
-export class Section implements IDrawable, IContains {
-    id: number;
-    name: string;
-    seats: Array<Seat>;
-    priority: number;
+import {ContextContainer} from "../chooseseats/ContextContainer";
+import {IContains} from "../chooseseats/IContains";
+import {IDrawable} from "../chooseseats/IDrawable";
+export class SectionModel implements IDrawable, IContains {
+    public id: number;
+    public name: string;
+    public priority:number;
 
     private height=100;
     private heightAndBuffer=110;

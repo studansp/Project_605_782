@@ -5,24 +5,44 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 var core_1 = require("@angular/core");
-var Section_1 = require("./chooseseats/Section");
 var Seat_1 = require("./chooseseats/Seat");
 var MouseHandler_1 = require("./chooseseats/MouseHandler");
 var ContextContainer_1 = require("./chooseseats/ContextContainer");
+var ApiService_1 = require("./ApiService");
+var SectionModel_1 = require("./models/SectionModel");
+var CartItemRequest_1 = require("./models/CartItemRequest");
+var TicketModel_1 = require("./models/TicketModel");
+var router_1 = require("@angular/router");
 var ChooseYourSeatsComponent = (function () {
-    function ChooseYourSeatsComponent() {
+    function ChooseYourSeatsComponent(apiService, router) {
+        this.apiService = apiService;
+        this.router = router;
+        this.sections = [];
+        this.seats = [];
         this.canvasId = "seatsCanvas";
         this.selectedSeats = new Set();
         this.backButtonSize = 50;
     }
     ChooseYourSeatsComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.sections = this.getSections();
         this.canvas = (document.getElementById(this.canvasId));
         this.ctx = new ContextContainer_1.ContextContainer(this.canvas.getContext("2d"));
         this.mouseHandler = new MouseHandler_1.MouseHandler(this.canvas, function (ev) { return _this.handleCanvasClick(ev); });
-        this.start();
+        this.apiService.getSections()
+            .subscribe(function (m) {
+            for (var i = 0; i < m.model.length; i++) {
+                var section = new SectionModel_1.SectionModel();
+                section.name = m.model[i].name;
+                section.id = m.model[i].id;
+                section.priority = i + 1;
+                _this.sections.push(section);
+            }
+            _this.start();
+        }, function (e) { alert('Unable to retrieve sections.'); });
     };
     ChooseYourSeatsComponent.prototype.start = function () {
         var _this = this;
@@ -107,39 +127,41 @@ var ChooseYourSeatsComponent = (function () {
         this.ctx.getRawContext().restore();
         this.drawOverlay();
     };
-    ChooseYourSeatsComponent.prototype.fillSeats = function () {
-        this.seats = this.getSeatsForSection(this.selectedSection.id);
-    };
-    ChooseYourSeatsComponent.prototype.getSeatsForSection = function (id) {
-        var rows = 50;
-        var columns = 50;
-        var currentId = 1;
-        var seats = new Array(rows * columns);
-        for (var row = 0; row < rows; row++) {
-            for (var column = 0; column < columns; column++) {
-                var currentSeat = new Seat_1.Seat();
-                currentSeat.id = currentId++;
-                currentSeat.row = row;
-                currentSeat.column = column;
-                seats[column + columns * row] = currentSeat;
-            }
+    ChooseYourSeatsComponent.prototype.addToCart = function () {
+        var _this = this;
+        if (this.selectedSeats.size == 0) {
+            alert('You must select at least one seat');
         }
-        return seats;
+        else {
+            var request = new CartItemRequest_1.CartItemRequest();
+            var tickets = new Array();
+            this.selectedSeats.forEach(function (seat) {
+                var ticket = new TicketModel_1.TicketModel();
+                ticket.id = seat.id;
+                tickets.push(ticket);
+            });
+            request.tickets = tickets;
+            this.apiService.addToCart(request)
+                .subscribe(function (m) {
+                _this.router.navigateByUrl("/cart");
+            }, function (e) { alert('error'); });
+        }
     };
-    ChooseYourSeatsComponent.prototype.getSections = function () {
-        var section1 = new Section_1.Section();
-        section1.id = 1;
-        section1.name = "Section 1";
-        section1.priority = 1;
-        var section2 = new Section_1.Section();
-        section2.id = 2;
-        section2.name = "Section 2";
-        section2.priority = 2;
-        var section3 = new Section_1.Section();
-        section3.id = 3;
-        section3.name = "Section 3";
-        section3.priority = 3;
-        return [section1, section2, section3];
+    ChooseYourSeatsComponent.prototype.fillSeats = function () {
+        var _this = this;
+        while (this.seats.length != 0)
+            this.seats.pop();
+        this.apiService.getSeatsForSection(this.selectedSection.id, this.eventId)
+            .subscribe(function (m) {
+            for (var i = 0; i < m.model.length; i++) {
+                var seat = new Seat_1.Seat();
+                seat.id = m.model[i].id;
+                seat.row = m.model[i].row;
+                seat.seat = m.model[i].seat;
+                seat.available = m.model[i].available;
+                _this.seats.push(seat);
+            }
+        }, function (e) { alert('Unable to retrieve seats.'); });
     };
     return ChooseYourSeatsComponent;
 }());
@@ -147,7 +169,8 @@ ChooseYourSeatsComponent = __decorate([
     core_1.Component({
         selector: 'chooseyourseats',
         templateUrl: './templates/chooseyourseats.html'
-    })
+    }),
+    __metadata("design:paramtypes", [ApiService_1.ApiService, router_1.Router])
 ], ChooseYourSeatsComponent);
 exports.ChooseYourSeatsComponent = ChooseYourSeatsComponent;
 //# sourceMappingURL=ChooseYourSeatsComponent.js.map

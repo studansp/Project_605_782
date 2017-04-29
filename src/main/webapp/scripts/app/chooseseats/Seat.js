@@ -5,7 +5,7 @@ var Seat = (function () {
         this.buffer = 15;
     }
     Seat.prototype.getCenterX = function () {
-        return this.column * this.buffer;
+        return this.seat * this.buffer;
     };
     Seat.prototype.getCenterY = function () {
         return this.row * this.buffer;

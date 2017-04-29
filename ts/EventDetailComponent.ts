@@ -1,9 +1,10 @@
 
-import {Component} from "@angular/core";
+import {Component, ViewChild} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ApiService} from "./ApiService";
 import {EventModel} from "./models/EventModel";
 import {CartItemRequest} from "./models/CartItemRequest";
+import {ChooseYourSeatsComponent} from "./ChooseYourSeatsComponent";
 @Component({
     selector: 'eventdetail',
     templateUrl: './templates/eventdetail.html'
@@ -11,14 +12,22 @@ import {CartItemRequest} from "./models/CartItemRequest";
 export class EventDetailComponent {
     public event:EventModel;
     public quantity:number;
+    public orderByQuantity:boolean=true;
+
+    @ViewChild('chooseyourseats') chooseyourseats:ChooseYourSeatsComponent;
 
     ngOnInit() {
         this.route.params.subscribe(params => {
+            this.chooseyourseats.eventId = params['id'];
             this.apiService.getEvent(params['id'])
                 .subscribe(m => {
                     this.event = m.model;
                 }, e => { this.router.navigateByUrl("/home"); });
         });
+    }
+
+    toggleChooseYourSeats() {
+        this.orderByQuantity = !this.orderByQuantity;
     }
 
     addQuantityToCart() {

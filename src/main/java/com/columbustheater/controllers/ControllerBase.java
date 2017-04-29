@@ -107,8 +107,6 @@ public class ControllerBase {
         return result;
     }
 
-
-
     protected OrderModel mapOrderToOrderModel(Order order) {
         OrderModel model = new OrderModel();
 

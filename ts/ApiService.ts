@@ -10,6 +10,8 @@ import {EventModel} from "./models/EventModel";
 import {CartItemRequest} from "./models/CartItemRequest";
 import {TicketModel} from "./models/TicketModel";
 import {OrderModel} from "./models/OrderModel";
+import {SectionModel} from "./models/SectionModel";
+import {Seat} from "./chooseseats/Seat";
 
 @Injectable()
 export class ApiService {
@@ -35,6 +37,14 @@ export class ApiService {
 
     public addToCart(request:CartItemRequest):Observable<ApiResponse<boolean>> {
         return this.simplePostRequest<boolean>("/api/cartitem", request);
+    }
+
+    public getSeatsForSection(id: number, eventId:number):Observable<ApiResponse<Array<Seat>>> {
+        return this.simpleGetRequest<Array<Seat>>("/api/eventsection?id="+id+"&eventId="+eventId);
+    }
+
+    public getSections():Observable<ApiResponse<Array<SectionModel>>> {
+        return this.simpleGetRequest<Array<SectionModel>>("/api/sections");
     }
 
     public getCart():Observable<ApiResponse<OrderModel>> {

@@ -10,7 +10,7 @@ Date: {{event.date | date: 'MM/dd/yyyy'}}
 Time: {{event.date | date: 'h:mm:ss a'}}
 <br/>
 
-<form (ngSubmit)="addQuantityToCart()">
+<form *ngIf="orderByQuantity" (ngSubmit)="addQuantityToCart()">
     <fieldset>
         <legend>Order</legend>
         Quantity:
@@ -29,6 +29,15 @@ Time: {{event.date | date: 'h:mm:ss a'}}
         </select>
 
         <button type="submit">Add to Cart</button>
+        <br />
+        <button (click)="toggleChooseYourSeats()">Choose your seats</button>
     </fieldset>
-    <chooseyourseats></chooseyourseats>
+
 </form>
+
+<div [hidden]="orderByQuantity===true">
+    <button (click)="toggleChooseYourSeats()">Order by Quantity</button>
+    <chooseyourseats  #chooseyourseats></chooseyourseats>
+</div>
+
+

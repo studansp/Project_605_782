@@ -33,6 +33,12 @@ var ApiService = (function () {
     ApiService.prototype.addToCart = function (request) {
         return this.simplePostRequest("/api/cartitem", request);
     };
+    ApiService.prototype.getSeatsForSection = function (id, eventId) {
+        return this.simpleGetRequest("/api/eventsection?id=" + id + "&eventId=" + eventId);
+    };
+    ApiService.prototype.getSections = function () {
+        return this.simpleGetRequest("/api/sections");
+    };
     ApiService.prototype.getCart = function () {
         return this.simpleGetRequest("/api/cart");
     };

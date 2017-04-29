@@ -3,17 +3,17 @@ import {IContains} from "./IContains";
 import {ContextContainer} from "./ContextContainer";
 
 export class Seat implements IDrawable, IContains {
-    id: number;
-    row: number;
-    column: number;
-    available: boolean;
-    selected: boolean;
+    public id: number;
+    public row: number;
+    public seat: number;
+    public available: boolean;
+    public selected: boolean;
 
     private radius = 5;
     private buffer = 15;
 
     private getCenterX(): number {
-        return this.column * this.buffer;
+        return this.seat * this.buffer;
     }
 
     private getCenterY(): number {

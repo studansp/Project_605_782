@@ -8,6 +8,7 @@ public class TicketModel {
     private String row;
     private String seat;
     private BigDecimal cost;
+    private boolean available;
 
     public long getId() {
         return id;
@@ -47,5 +48,13 @@ public class TicketModel {
 
     public void setCost(BigDecimal cost) {
         this.cost = cost;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 }
