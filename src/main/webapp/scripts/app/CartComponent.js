@@ -15,8 +15,8 @@ var ApiService_1 = require("./ApiService");
 var OrderLineModel_1 = require("./models/OrderLineModel");
 var CartComponent = (function () {
     function CartComponent(apiService, router) {
-        var _this = this;
         this.apiService = apiService;
+        this.router = router;
         this.isCheckingOut = false;
         this.isOrderComplete = false;
         this.title = "Cart";
@@ -28,21 +28,44 @@ var CartComponent = (function () {
         }
         else {
             this.account = apiService.getAccount();
-            apiService.getCart()
-                .subscribe(function (m) {
-                for (var i = 0; i < m.model.lines.length; i++) {
-                    var rawLine = m.model.lines[i];
-                    var line = new OrderLineModel_1.OrderLineModel();
-                    line.event = rawLine.event;
-                    line.tickets = new Array();
-                    for (var j = 0; j < rawLine.tickets.length; j++) {
-                        line.tickets.push(rawLine.tickets[j]);
-                    }
-                    _this.model.lines.push(line);
-                }
-            }, function (e) { router.navigateByUrl('/login'); });
+            this.loadCart();
         }
     }
+    CartComponent.prototype.loadCart = function () {
+        var _this = this;
+        this.apiService.getCart()
+            .subscribe(function (m) {
+            _this.mapCart(m.model);
+        }, function (e) { _this.router.navigateByUrl('/login'); });
+    };
+    CartComponent.prototype.mapCart = function (model) {
+        while (this.model.lines.length > 0)
+            this.model.lines.pop();
+        for (var i = 0; i < model.lines.length; i++) {
+            var rawLine = model.lines[i];
+            var line = new OrderLineModel_1.OrderLineModel();
+            line.event = rawLine.event;
+            line.tickets = new Array();
+            for (var j = 0; j < rawLine.tickets.length; j++) {
+                line.tickets.push(rawLine.tickets[j]);
+            }
+            this.model.lines.push(line);
+        }
+    };
+    CartComponent.prototype.remove = function (ticket) {
+        var _this = this;
+        this.apiService.removeTicket(ticket.id)
+            .subscribe(function (m) {
+            for (var i = 0; i < _this.model.lines.length; i++) {
+                var currentLine = _this.model.lines[i];
+                for (var j = 0; j < currentLine.tickets.length; j++) {
+                    if (currentLine.tickets[i].id == ticket.id) {
+                        currentLine.tickets.splice(i, 1);
+                    }
+                }
+            }
+        }, function (e) { _this.router.navigateByUrl('/login'); });
+    };
     CartComponent.prototype.initCheckout = function () {
         this.isCheckingOut = true;
         this.title = "Checkout";

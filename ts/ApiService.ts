@@ -79,6 +79,10 @@ export class ApiService {
         return this.simpleGetRequest<Array<SectionModel>>("/api/sections");
     }
 
+    public removeTicket(id:number):Observable<ApiResponse<OrderModel>> {
+        return this.simpleDeleteRequest<OrderModel>("/api/cartitem?id="+id);
+    }
+
     public getCart():Observable<ApiResponse<OrderModel>> {
         return this.simpleGetRequest<OrderModel>("/api/cart");
     }
@@ -146,6 +150,12 @@ export class ApiService {
 
     private simplePutRequest<T>(url: string, model: any):Observable<ApiResponse<T>> {
         return this.http.put(url, model, { headers: this.getHeaders() })
+            .map((res:Response)=>{ return this.extractData<T>(res)})
+            .catch(this.handleError);
+    }
+
+    private simpleDeleteRequest<T>(url: string):Observable<ApiResponse<T>> {
+        return this.http.delete(url, { headers: this.getHeaders() })
             .map((res:Response)=>{ return this.extractData<T>(res)})
             .catch(this.handleError);
     }

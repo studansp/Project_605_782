@@ -5,6 +5,7 @@ import com.columbustheater.models.Account;
 import com.columbustheater.models.Order;
 import com.columbustheater.models.Ticket;
 import com.columbustheater.viewmodels.CartItemRequest;
+import com.columbustheater.viewmodels.OrderModel;
 import com.columbustheater.viewmodels.Response;
 import org.hibernate.Session;
 import org.springframework.web.bind.annotation.*;
@@ -99,7 +100,28 @@ public class CartItemController extends ControllerBase {
 
     @RequestMapping(path=path, method = RequestMethod.DELETE)
     @ResponseBody
-    public Response<String> delete(@RequestBody Integer id) {
-        return null;
+    public Response<Boolean> delete(@RequestParam(value="id") int id, @RequestHeader(value=AuthHeader) String authHeader) {
+        Order order = getOrder(authHeader);
+        Response<Boolean> response = new Response<Boolean>();
+
+        DataContext context = getDataContext(true);
+        EntityManager em = context.getEntityManager();
+
+        for (Ticket ticket :
+                order.getTickets()) {
+            if (ticket.getId() == id) {
+                if(em.getTransaction().isActive()==false)
+                em.getTransaction().begin();
+                ticket = em.find(Ticket.class, ticket.getId());
+                ticket.setOrder(null);
+
+                em.getTransaction().commit();
+                return response;
+            }
+        }
+
+        response.setMessage("Unable to delete ticket");
+
+        return response;
     }
 }

@@ -18,29 +18,57 @@ export class CartComponent {
     public title:String="Cart";
     public shipType:string="0";
 
-    constructor(private apiService:ApiService, router:Router) {
+    constructor(private apiService:ApiService, private router:Router) {
         this.model = new OrderModel();
         this.model.lines = new Array<OrderLineModel>();
         if(apiService.isAuthenticated()==false) {
             router.navigateByUrl('/login');
         } else {
             this.account = apiService.getAccount();
-            apiService.getCart()
-                .subscribe(m => {
-                    for(var i=0;i<m.model.lines.length;i++) {
-                        var rawLine = m.model.lines[i];
-                        var line:OrderLineModel = new OrderLineModel();
-                        line.event = rawLine.event;
-                        line.tickets = new Array<TicketModel>();
-
-                        for(var j=0;j<rawLine.tickets.length;j++) {
-                            line.tickets.push(rawLine.tickets[j]);
-                        }
-
-                        this.model.lines.push(line);
-                    }
-                }, e => { router.navigateByUrl('/login'); });
+            this.loadCart();
         }
+    }
+
+    private loadCart() {
+        this.apiService.getCart()
+            .subscribe(m => {
+                this.mapCart(m.model);
+
+            }, e => { this.router.navigateByUrl('/login'); });
+    }
+
+    private mapCart(model:OrderModel) {
+        while(this.model.lines.length>0)
+            this.model.lines.pop();
+
+        for(var i=0;i<model.lines.length;i++) {
+            var rawLine = model.lines[i];
+            var line:OrderLineModel = new OrderLineModel();
+            line.event = rawLine.event;
+            line.tickets = new Array<TicketModel>();
+
+            for(var j=0;j<rawLine.tickets.length;j++) {
+                line.tickets.push(rawLine.tickets[j]);
+            }
+
+            this.model.lines.push(line);
+        }
+    }
+
+    public remove(ticket:TicketModel):void {
+        this.apiService.removeTicket(ticket.id)
+            .subscribe(m => {
+                for(var i=0;i<this.model.lines.length;i++) {
+                    var currentLine = this.model.lines[i];
+
+                    for(var j=0;j<currentLine.tickets.length;j++) {
+                        if(currentLine.tickets[i].id==ticket.id) {
+                            currentLine.tickets.splice(i,1);
+                        }
+                    }
+                }
+
+            }, e => { this.router.navigateByUrl('/login'); });
     }
 
     public initCheckout():void{

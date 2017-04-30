@@ -64,6 +64,9 @@ var ApiService = (function () {
     ApiService.prototype.getSections = function () {
         return this.simpleGetRequest("/api/sections");
     };
+    ApiService.prototype.removeTicket = function (id) {
+        return this.simpleDeleteRequest("/api/cartitem?id=" + id);
+    };
     ApiService.prototype.getCart = function () {
         return this.simpleGetRequest("/api/cart");
     };
@@ -121,6 +124,12 @@ var ApiService = (function () {
     ApiService.prototype.simplePutRequest = function (url, model) {
         var _this = this;
         return this.http.put(url, model, { headers: this.getHeaders() })
+            .map(function (res) { return _this.extractData(res); })
+            .catch(this.handleError);
+    };
+    ApiService.prototype.simpleDeleteRequest = function (url) {
+        var _this = this;
+        return this.http.delete(url, { headers: this.getHeaders() })
             .map(function (res) { return _this.extractData(res); })
             .catch(this.handleError);
     };
