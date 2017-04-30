@@ -19,17 +19,24 @@ public class EventsController extends ControllerBase {
     @ResponseBody
     public Response<List<Event>> get() {
         DataContext context = getDataContext();
-        EntityManager em = context.getEntityManager();
-        CriteriaBuilder builder = context.getCriteriaBuilder();
+        List<Event> result=null;
+        try {
 
-        CriteriaQuery<Event> eventCriteriaQuery = builder.createQuery(Event.class);
-        Root<Event> root = eventCriteriaQuery.from(Event.class);
+            EntityManager em = context.getEntityManager();
+            CriteriaBuilder builder = context.getCriteriaBuilder();
 
-        eventCriteriaQuery.select(root);
-        List<Event> result = em.createQuery( eventCriteriaQuery ).getResultList();
+            CriteriaQuery<Event> eventCriteriaQuery = builder.createQuery(Event.class);
+            Root<Event> root = eventCriteriaQuery.from(Event.class);
 
-        Collections.sort(result, (a, b) -> b.getDate().compareTo(a.getDate()));
-        Collections.reverse(result);
+            eventCriteriaQuery.select(root);
+            result = em.createQuery( eventCriteriaQuery ).getResultList();
+
+            Collections.sort(result, (a, b) -> b.getDate().compareTo(a.getDate()));
+            Collections.reverse(result);
+
+        } finally {
+            closeIfOpen(context);
+        }
 
         return new Response<>(result);
     }

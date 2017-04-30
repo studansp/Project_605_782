@@ -11,6 +11,9 @@ import com.columbustheater.viewmodels.OrderLineModel;
 import com.columbustheater.viewmodels.OrderModel;
 import com.columbustheater.viewmodels.TicketModel;
 import io.jsonwebtoken.Jwts;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -29,19 +32,10 @@ public class ControllerBase {
     protected final String AuthHeader = "Authorization";
     protected final String key = "OwLMkSWJnKeaDaO_l7MOLCdIAA0km2gbM_YwSMGoaOlx-jcDsfUylj6tiRDHgp5qNnQWlHm6CblMFHN2YGfdZWrXzHV90VJgpSbQ6GyKZY01RTaRTEcYx5H_7eTXYMTC4AjH8I9LXE-Gv9Sfz3I9KHp5QruXw6f0jfHr4T0lE_olb79ujL6X8ycrild-N-lgOJ-nfiPxz9uIuI1BaU_i1gJO1FjTjwoDIqdM8dTeroU-rnT1rOVBA1-my-dIu-sMyr2uBJLq73GKbKse2Y5tLZkexegnGH0GrRcZwCpBM1zkPQ-0mxWG32m4KoDmI3hHkiH7fba83raxH7DM0bnDjQ";
 
-    private DataContext dataContext;
-
     protected DataContext getDataContext() {
-        return getDataContext(false);
-    }
 
-    protected DataContext getDataContext(boolean createNew) {
-        if(createNew || dataContext==null) {
-            DataContextFactory factory = Application.getFactory();
-            dataContext = factory.createDataContext();
-        }
-
-        return dataContext;
+        DataContextFactory factory = Application.getFactory();
+        return factory.createDataContext();
     }
 
     protected Integer getAccountId(String authHeader) {
@@ -53,10 +47,34 @@ public class ControllerBase {
         }
     }
 
+    protected void closeIfOpen(DataContext context) {
+        if(context!=null) {
+            Session session = context.getSession();
+
+            if(session!=null) {
+                Transaction transaction = session.getTransaction();
+                if(transaction.isActive())
+                    transaction.rollback();
+
+                if(session.isOpen()) {
+                    session.close();
+                }
+            }
+
+            EntityManager em = context.getEntityManager();
+
+            if(em!=null && em.isOpen()) {
+                em.close();
+            }
+        }
+    }
+
     protected Account getAccount(String authHeader) {
+        DataContext context=null;
+
         try{
             Integer id = getAccountId(authHeader);
-            DataContext context = getDataContext();
+            context = getDataContext();
             EntityManager em = context.getEntityManager();
             CriteriaBuilder builder = context.getCriteriaBuilder();
 
@@ -70,6 +88,8 @@ public class ControllerBase {
         } catch (Exception ex) {
             //TODO Log or something
             return null;
+        } finally {
+            closeIfOpen(context);
         }
     }
 
@@ -108,6 +128,8 @@ public class ControllerBase {
                     em.getTransaction().rollback();
             }
 
+        } finally {
+            closeIfOpen(context);
         }
 
         return result;

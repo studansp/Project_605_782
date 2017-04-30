@@ -29,7 +29,7 @@ public class CartItemController extends ControllerBase {
         Order order = getOrder(authHeader);
         Response<Boolean> result = new Response<>();
 
-        DataContext context = getDataContext(true);
+        DataContext context = getDataContext();
         Session session = context.getSession();
 
         if(session.getTransaction().isActive())
@@ -104,21 +104,26 @@ public class CartItemController extends ControllerBase {
         Order order = getOrder(authHeader);
         Response<Boolean> response = new Response<Boolean>();
 
-        DataContext context = getDataContext(true);
+        DataContext context = getDataContext();
         EntityManager em = context.getEntityManager();
 
-        for (Ticket ticket :
-                order.getTickets()) {
-            if (ticket.getId() == id) {
-                if(em.getTransaction().isActive()==false)
-                em.getTransaction().begin();
-                ticket = em.find(Ticket.class, ticket.getId());
-                ticket.setOrder(null);
+        try{
+            for (Ticket ticket :
+                    order.getTickets()) {
+                if (ticket.getId() == id) {
+                    if(em.getTransaction().isActive()==false)
+                        em.getTransaction().begin();
+                    ticket = em.find(Ticket.class, ticket.getId());
+                    ticket.setOrder(null);
 
-                em.getTransaction().commit();
-                return response;
+                    em.getTransaction().commit();
+                    return response;
+                }
             }
+        } finally {
+            closeIfOpen(context);
         }
+
 
         response.setMessage("Unable to delete ticket");
 

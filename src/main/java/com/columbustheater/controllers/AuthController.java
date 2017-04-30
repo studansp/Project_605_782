@@ -59,5 +59,8 @@ public class AuthController extends ControllerBase {
         } catch(NoResultException ex) {
             return new Response<>(null);
         }
+        finally {
+            closeIfOpen(context);
+        }
     }
 }

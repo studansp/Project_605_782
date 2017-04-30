@@ -16,14 +16,22 @@ public class OrderController extends ControllerBase {
     @ResponseBody
     public Response<OrderModel> create(@RequestHeader(value=AuthHeader) String authHeader) {
         DataContext context = getDataContext();
-        EntityManager em = context.getEntityManager();
+        Order order = null;
 
-        em.getTransaction().begin();
-        Order order = getOrder(authHeader);
-        order.setOrdered(true);
-        em.persist(order);
-        em.getTransaction().commit();
+        try {
+            EntityManager em = context.getEntityManager();
 
+            em.getTransaction().begin();
+            order = getOrder(authHeader);
+
+            order = em.find(Order.class, order.getId());
+
+            order.setOrdered(true);
+            em.getTransaction().commit();
+
+        } finally {
+            closeIfOpen(context);
+        }
         return new Response<>(mapOrderToOrderModel(order));
     }
 

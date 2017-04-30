@@ -56,18 +56,19 @@ export class CartComponent {
     }
 
     public remove(ticket:TicketModel):void {
+
+        for(var i=0;i<this.model.lines.length;i++) {
+            var currentLine = this.model.lines[i];
+
+            for(var j=0;j<currentLine.tickets.length;j++) {
+                if(currentLine.tickets[j].id==ticket.id) {
+                    currentLine.tickets.splice(j,1);
+                }
+            }
+        }
+
         this.apiService.removeTicket(ticket.id)
             .subscribe(m => {
-                for(var i=0;i<this.model.lines.length;i++) {
-                    var currentLine = this.model.lines[i];
-
-                    for(var j=0;j<currentLine.tickets.length;j++) {
-                        if(currentLine.tickets[i].id==ticket.id) {
-                            currentLine.tickets.splice(i,1);
-                        }
-                    }
-                }
-
             }, e => { this.router.navigateByUrl('/login'); });
     }
 

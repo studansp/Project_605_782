@@ -17,14 +17,19 @@ public class EventController extends ControllerBase {
     @ResponseBody
     public Response<Event> get(@RequestParam(value="id") int id) {
         DataContext context = getDataContext();
-        EntityManager em = context.getEntityManager();
-        CriteriaBuilder builder = context.getCriteriaBuilder();
+        Event result=null;
+        try {
+            EntityManager em = context.getEntityManager();
+            CriteriaBuilder builder = context.getCriteriaBuilder();
 
-        CriteriaQuery<Event> eventCriteriaQuery = builder.createQuery(Event.class);
-        Root<Event> root = eventCriteriaQuery.from(Event.class);
-        eventCriteriaQuery.where(builder.equal(root.get("id"), id));
-        eventCriteriaQuery.select(root);
-        Event result = em.createQuery( eventCriteriaQuery ).getSingleResult();
+            CriteriaQuery<Event> eventCriteriaQuery = builder.createQuery(Event.class);
+            Root<Event> root = eventCriteriaQuery.from(Event.class);
+            eventCriteriaQuery.where(builder.equal(root.get("id"), id));
+            eventCriteriaQuery.select(root);
+            result = em.createQuery( eventCriteriaQuery ).getSingleResult();
+        } finally {
+            closeIfOpen(context);
+        }
 
         return new Response<>(result);
     }

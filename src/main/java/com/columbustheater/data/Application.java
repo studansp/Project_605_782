@@ -132,6 +132,9 @@ public class Application extends SpringBootServletInitializer {
 
             em.getTransaction().commit();
         }
+
+        if(context.getSession().isOpen())
+            context.getSession().close();
     }
 
     static Map<Event, BigDecimal> getAllEvents() {

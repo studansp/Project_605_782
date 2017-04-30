@@ -21,38 +21,44 @@ public class EventSectionController extends ControllerBase {
     @ResponseBody
     public Response<TicketModel[]> get(@RequestParam(value="id") int id, @RequestParam(value="eventId") int eventId) {
         DataContext context = getDataContext();
-        context.getSession().clear();
-        EntityManager em = context.getEntityManager();
-        em.clear();
-        CriteriaBuilder builder = context.getCriteriaBuilder();
+        TicketModel[] responseModel=null;
 
-        CriteriaQuery<Ticket> ticketCriteriaQuery = builder.createQuery(Ticket.class);
-        Root<Ticket> root = ticketCriteriaQuery.from(Ticket.class);
-        List<Predicate> predicates = new ArrayList<>();
+        try {
 
-        predicates.add(builder.equal(root.join("event").get("id"), eventId));
-        predicates.add(builder.equal(root.join("seat").join("section").get("id"), id));
+            context.getSession().clear();
+            EntityManager em = context.getEntityManager();
+            CriteriaBuilder builder = context.getCriteriaBuilder();
 
-        ticketCriteriaQuery.select(root).where(predicates.toArray(new Predicate[]{}));
+            CriteriaQuery<Ticket> ticketCriteriaQuery = builder.createQuery(Ticket.class);
+            Root<Ticket> root = ticketCriteriaQuery.from(Ticket.class);
+            List<Predicate> predicates = new ArrayList<>();
 
-        List<Ticket> result = em.createQuery(ticketCriteriaQuery).getResultList();
-        TicketModel[] responseModel = new TicketModel[result.size()];
+            predicates.add(builder.equal(root.join("event").get("id"), eventId));
+            predicates.add(builder.equal(root.join("seat").join("section").get("id"), id));
 
-        int i=0;
+            ticketCriteriaQuery.select(root).where(predicates.toArray(new Predicate[]{}));
 
-        for (Ticket ticket :
-                result) {
-            TicketModel model = new TicketModel();
-            model.setId(ticket.getId());
-            model.setSection(ticket.getSeat().getSection().getName());
-            model.setRow(String.valueOf(ticket.getSeat().getRow()));
-            model.setSeat(String.valueOf(ticket.getSeat().getSeat()));
-            model.setCost(ticket.getCost());
-            model.setAvailable(ticket.getOrder()==null);
+            List<Ticket> result = em.createQuery(ticketCriteriaQuery).getResultList();
+            responseModel = new TicketModel[result.size()];
 
-            responseModel[i]=model;
+            int i=0;
 
-            i++;
+            for (Ticket ticket :
+                    result) {
+                TicketModel model = new TicketModel();
+                model.setId(ticket.getId());
+                model.setSection(ticket.getSeat().getSection().getName());
+                model.setRow(String.valueOf(ticket.getSeat().getRow()));
+                model.setSeat(String.valueOf(ticket.getSeat().getSeat()));
+                model.setCost(ticket.getCost());
+                model.setAvailable(ticket.getOrder()==null);
+
+                responseModel[i]=model;
+
+                i++;
+            }
+        } finally {
+            closeIfOpen(context);
         }
 
         return new Response<>(responseModel);

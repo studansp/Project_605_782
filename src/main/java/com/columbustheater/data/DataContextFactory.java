@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
  */
 public class DataContextFactory {
     private static SessionFactory sessionFactory;
+    private static EntityManager entityManager;
 
     public DataContext createDataContext() {
         Configuration cfg = createConfiguration();
@@ -36,9 +37,11 @@ public class DataContextFactory {
                 .setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/GrantHillPizza?autoReconnect=true")
                 .setProperty("show_sql", "true")
                 .setProperty("hibernate.hbm2ddl.auto", "update")
-                .setProperty("hibernate.c3p0.timeout", "600")
-                .setProperty("hibernate.c3p0.maxIdleTimeExcessConnections", "20")
+                .setProperty("hibernate.c3p0.timeout", "30")
+                .setProperty("hibernate.c3p0.max_size", "1000")
+                .setProperty("hibernate.c3p0.maxIdleTimeExcessConnections", "5")
                 .setProperty("hibernate.c3p0.validate", "false")
+                .setProperty("connection.pool_size", "1000")
                 .setProperty("hibernate.c3p0.idle_test_period", "30")
                 .setProperty("hibernate.c3p0.automaticTestTable", "conTestTable")
                 .setProperty("dialect", "org.hibernate.dialect.MySQLDialect")

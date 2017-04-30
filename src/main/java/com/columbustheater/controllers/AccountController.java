@@ -33,6 +33,9 @@ public class AccountController extends ControllerBase {
             if(tran.isActive())
                 tran.rollback();
         }
+        finally {
+            closeIfOpen(context);
+        }
 
         return new Response<>(account);
     }
@@ -68,6 +71,9 @@ public class AccountController extends ControllerBase {
         } catch(Exception ex) {
             if(em.getTransaction().isActive())
                 em.getTransaction().rollback();
+        }
+        finally {
+            closeIfOpen(context);
         }
 
         return new Response<>(currentAccount);

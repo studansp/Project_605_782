@@ -54,16 +54,16 @@ var CartComponent = (function () {
     };
     CartComponent.prototype.remove = function (ticket) {
         var _this = this;
-        this.apiService.removeTicket(ticket.id)
-            .subscribe(function (m) {
-            for (var i = 0; i < _this.model.lines.length; i++) {
-                var currentLine = _this.model.lines[i];
-                for (var j = 0; j < currentLine.tickets.length; j++) {
-                    if (currentLine.tickets[i].id == ticket.id) {
-                        currentLine.tickets.splice(i, 1);
-                    }
+        for (var i = 0; i < this.model.lines.length; i++) {
+            var currentLine = this.model.lines[i];
+            for (var j = 0; j < currentLine.tickets.length; j++) {
+                if (currentLine.tickets[j].id == ticket.id) {
+                    currentLine.tickets.splice(j, 1);
                 }
             }
+        }
+        this.apiService.removeTicket(ticket.id)
+            .subscribe(function (m) {
         }, function (e) { _this.router.navigateByUrl('/login'); });
     };
     CartComponent.prototype.initCheckout = function () {

@@ -16,13 +16,21 @@ public class SectionsController extends ControllerBase {
     @ResponseBody
     public Response<Section[]> get() {
         DataContext context = getDataContext();
-        EntityManager em = context.getEntityManager();
-        CriteriaBuilder builder = context.getSession().getCriteriaBuilder();
-        CriteriaQuery<Section> accountCriteriaQuery = builder.createQuery(Section.class);
+        List<Section> accounts=null;
+        try {
 
-        accountCriteriaQuery.select(accountCriteriaQuery.from(Section.class));
+            EntityManager em = context.getEntityManager();
+            CriteriaBuilder builder = context.getSession().getCriteriaBuilder();
+            CriteriaQuery<Section> accountCriteriaQuery = builder.createQuery(Section.class);
 
-        List<Section> accounts = em.createQuery( accountCriteriaQuery ).getResultList();
+            accountCriteriaQuery.select(accountCriteriaQuery.from(Section.class));
+
+            accounts = em.createQuery( accountCriteriaQuery ).getResultList();
+
+        } finally {
+            closeIfOpen(context);
+        }
+
 
         return new Response<>(accounts.toArray(new Section[accounts.size()]));
     }
