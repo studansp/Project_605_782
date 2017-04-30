@@ -30,6 +30,10 @@ public class CartItemController extends ControllerBase {
 
         DataContext context = getDataContext(true);
         Session session = context.getSession();
+
+        if(session.getTransaction().isActive())
+            session.getTransaction().rollback();
+
         session.getTransaction().begin();
 
         if(request.isOrderByQuantity()) {

@@ -15,24 +15,56 @@ import {Seat} from "./chooseseats/Seat";
 
 @Injectable()
 export class ApiService {
-    constructor (private http: Http) {}
+    constructor (private http: Http) {
+        this.account = this.getAccountCookie();
+    }
 
-    private token:string;
+    private account:AccountModel;
+    private accountCookieName:string='AccountCookie';
 
-    public setToken(newToken:string) {
-        this.token=newToken;
+    public getAccount():AccountModel{
+        return this.account;
+    }
+
+    private getAccountCookie():AccountModel {
+        var result = document.cookie.split(';')
+            .map(c=>c.trim())
+            .filter(c=>{ return c.substring(0, this.accountCookieName.length+1) === `${this.accountCookieName}=`;})
+            .map(c=>{return decodeURIComponent(c.substring(this.accountCookieName.length+1));});
+
+        if(result==null || result.length===0) {
+            return null;
+        }
+
+        var parsedAccount = JSON.parse(result[0]);
+
+        return parsedAccount;
+    }
+
+    private setAccountCookie(account: string, expDays:number) {
+        let d:Date = new Date();
+        d.setTime(d.getTime() +  expDays * 24 * 60 * 60 * 1000);
+        let expires:string = `expires=${d.toUTCString()}`;
+        document.cookie = `${this.accountCookieName}=${account}; ${expires}`;
+    }
+
+
+    public setAccount(account:AccountModel) {
+        this.account=account;
+        this.setAccountCookie(JSON.stringify(account), 1);
     }
 
     public clearToken():void {
-        this.token=null;
+        this.account=null;
+        this.setAccountCookie(null, -1);
     }
 
     public isAuthenticated():boolean {
-        return this.token!=null;
+        return this.account!=null;
     }
 
-    public authenicate(model:LoginModel):Observable<ApiResponse<string>> {
-        return this.simplePostRequest<string>("/api/authenticate", model);
+    public authenicate(model:LoginModel):Observable<ApiResponse<AccountModel>> {
+        return this.simplePostRequest<AccountModel>("/api/authenticate", model);
     }
 
     public addToCart(request:CartItemRequest):Observable<ApiResponse<boolean>> {
@@ -100,7 +132,7 @@ export class ApiService {
         headers.append('Content-Type', 'application/json');
 
         if(this.isAuthenticated()) {
-            headers.append('Authorization', this.token);
+            headers.append('Authorization', this.account.token);
         }
 
         return headers;

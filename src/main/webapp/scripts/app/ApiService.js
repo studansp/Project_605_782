@@ -17,15 +17,40 @@ var ApiResponse_1 = require("./models/ApiResponse");
 var ApiService = (function () {
     function ApiService(http) {
         this.http = http;
+        this.accountCookieName = 'AccountCookie';
+        this.account = this.getAccountCookie();
     }
-    ApiService.prototype.setToken = function (newToken) {
-        this.token = newToken;
+    ApiService.prototype.getAccount = function () {
+        return this.account;
+    };
+    ApiService.prototype.getAccountCookie = function () {
+        var _this = this;
+        var result = document.cookie.split(';')
+            .map(function (c) { return c.trim(); })
+            .filter(function (c) { return c.substring(0, _this.accountCookieName.length + 1) === _this.accountCookieName + "="; })
+            .map(function (c) { return decodeURIComponent(c.substring(_this.accountCookieName.length + 1)); });
+        if (result == null || result.length === 0) {
+            return null;
+        }
+        var parsedAccount = JSON.parse(result[0]);
+        return parsedAccount;
+    };
+    ApiService.prototype.setAccountCookie = function (account, expDays) {
+        var d = new Date();
+        d.setTime(d.getTime() + expDays * 24 * 60 * 60 * 1000);
+        var expires = "expires=" + d.toUTCString();
+        document.cookie = this.accountCookieName + "=" + account + "; " + expires;
+    };
+    ApiService.prototype.setAccount = function (account) {
+        this.account = account;
+        this.setAccountCookie(JSON.stringify(account), 1);
     };
     ApiService.prototype.clearToken = function () {
-        this.token = null;
+        this.account = null;
+        this.setAccountCookie(null, -1);
     };
     ApiService.prototype.isAuthenticated = function () {
-        return this.token != null;
+        return this.account != null;
     };
     ApiService.prototype.authenicate = function (model) {
         return this.simplePostRequest("/api/authenticate", model);
@@ -83,7 +108,7 @@ var ApiService = (function () {
         var headers = new http_1.Headers();
         headers.append('Content-Type', 'application/json');
         if (this.isAuthenticated()) {
-            headers.append('Authorization', this.token);
+            headers.append('Authorization', this.account.token);
         }
         return headers;
     };

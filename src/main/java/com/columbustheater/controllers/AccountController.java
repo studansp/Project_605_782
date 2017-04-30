@@ -56,9 +56,17 @@ public class AccountController extends ControllerBase {
         DataContext context = getDataContext();
         EntityManager em = context.getEntityManager();
 
-        em.getTransaction().begin();
-        context.getSession().save(currentAccount);
-        em.getTransaction().commit();
+        try {
+
+            if(em.getTransaction().isActive()==false)
+                em.getTransaction().begin();
+
+            context.getSession().save(currentAccount);
+            em.getTransaction().commit();
+        } catch(Exception ex) {
+            if(em.getTransaction().isActive())
+                em.getTransaction().rollback();
+        }
 
         return new Response<>(currentAccount);
     }

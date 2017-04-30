@@ -27,7 +27,7 @@ public class AuthController extends ControllerBase {
 
     @RequestMapping(path="/api/authenticate")
     @ResponseBody
-    public Response<String> authenticate(@RequestBody Login login) {
+    public Response<Account> authenticate(@RequestBody Login login) {
         DataContext context = getDataContext();
         EntityManager em = context.getEntityManager();
         CriteriaBuilder builder = context.getCriteriaBuilder();
@@ -52,7 +52,9 @@ public class AuthController extends ControllerBase {
                             .signWith(SignatureAlgorithm.HS256, key)
                             .compact();
 
-            return new Response<>(token);
+            result.setToken(token);
+
+            return new Response<>(result);
 
         } catch(NoResultException ex) {
             return new Response<>(null);

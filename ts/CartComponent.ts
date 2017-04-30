@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {ApiService} from "./ApiService";
 import {OrderLineModel} from "./models/OrderLineModel";
 import {TicketModel} from "./models/TicketModel";
+import {AccountModel} from "./models/AccountModel";
 
 @Component({
     selector: 'cart',
@@ -13,7 +14,9 @@ export class CartComponent {
     public model: OrderModel;
     public isCheckingOut:boolean=false;
     public isOrderComplete:boolean=false;
+    public account:AccountModel;
     public title:String="Cart";
+    public shipType:string="0";
 
     constructor(private apiService:ApiService, router:Router) {
         this.model = new OrderModel();
@@ -21,6 +24,7 @@ export class CartComponent {
         if(apiService.isAuthenticated()==false) {
             router.navigateByUrl('/login');
         } else {
+            this.account = apiService.getAccount();
             apiService.getCart()
                 .subscribe(m => {
                     for(var i=0;i<m.model.lines.length;i++) {

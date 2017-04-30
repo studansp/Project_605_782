@@ -4,6 +4,7 @@ export class AccountModel {
     public address1:string;
     public address2:string;
     public email:string;
+    public token:string;
     public password:string;
     public confirmpassword:string;
 }

@@ -30,6 +30,8 @@ export class ProfileComponent {
     private handleResponse(response: ApiResponse<AccountModel>) {
         if(response.model!=null) {
             this.model = response.model;
+            this.model.token = this.apiService.getAccount().token;
+            this.apiService.setAccount(this.model);
         } else {
             alert("Test error.")
         }

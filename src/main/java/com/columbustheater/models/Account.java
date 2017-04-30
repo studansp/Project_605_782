@@ -7,6 +7,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "accounts")
 public class Account extends ModelBase {
+    private String token;
+
     @Column
     private String name;
 
@@ -72,5 +74,13 @@ public class Account extends ModelBase {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

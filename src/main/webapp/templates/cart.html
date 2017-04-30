@@ -102,12 +102,12 @@
                         <div class="row">
                             <div class="col-xs-6">
                                 <label class="radio-inline">
-                                    <input type="radio" name="shipType" id="shipTypeWillCall" value="0"> Will Call
+                                    <input type="radio" name="shipType" id="shipTypeWillCall" value="0" [(ngModel)]="shipType"> Will Call
                                 </label>
                             </div>
                             <div class="col-xs-6">
                                 <label class="radio-inline">
-                                    <input type="radio" name="shipType" id="shipTypeShipped" value="1"> Shipped
+                                    <input type="radio" name="shipType" id="shipTypeShipped" value="1" [(ngModel)]="shipType"> Shipped
                                 </label>
                             </div>
                         </div>
@@ -115,7 +115,19 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-2 col-md-offset-10">
+                <div class="col-md-6 bg-info ship-helper">
+                    <p class="lead" *ngIf="shipType==='0'">Will call tickets are available five days before the event.</p>
+                    <p class="lead" *ngIf="shipType==='1'">We will ship to your address on file:</p>
+                    <p *ngIf="shipType==='1'">
+                        {{account.name}}
+                        <br/>
+                        {{account.address1}}
+                        <br/>
+                        {{account.address2}}
+                    </p>
+                    <p *ngIf="shipType==='1'">If this is incorrect, please update your <a routerLink="/profile">profile</a></p>.
+                </div>
+                <div class="col-md-2 col-md-offset-4">
                     <button class="btn btn-primary" (click)="placeOrder()">Place order</button>
                 </div>
             </div>

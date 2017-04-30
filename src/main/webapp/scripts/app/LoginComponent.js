@@ -26,7 +26,7 @@ var LoginComponent = (function () {
     };
     LoginComponent.prototype.handleResponse = function (loginResponse) {
         if (loginResponse.model != null) {
-            this.apiService.setToken(loginResponse.model);
+            this.apiService.setAccount(loginResponse.model);
             this.router.navigateByUrl("/home");
         }
         else {

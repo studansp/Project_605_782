@@ -33,6 +33,8 @@ var ProfileComponent = (function () {
     ProfileComponent.prototype.handleResponse = function (response) {
         if (response.model != null) {
             this.model = response.model;
+            this.model.token = this.apiService.getAccount().token;
+            this.apiService.setAccount(this.model);
         }
         else {
             alert("Test error.");

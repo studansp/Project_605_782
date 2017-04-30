@@ -20,12 +20,14 @@ var CartComponent = (function () {
         this.isCheckingOut = false;
         this.isOrderComplete = false;
         this.title = "Cart";
+        this.shipType = "0";
         this.model = new OrderModel_1.OrderModel();
         this.model.lines = new Array();
         if (apiService.isAuthenticated() == false) {
             router.navigateByUrl('/login');
         }
         else {
+            this.account = apiService.getAccount();
             apiService.getCart()
                 .subscribe(function (m) {
                 for (var i = 0; i < m.model.lines.length; i++) {
