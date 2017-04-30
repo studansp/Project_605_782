@@ -1,72 +1,124 @@
 <h1>{{ title }}</h1>
 
-<div *ngIf="emptyCart">
-    <p>
+<div *ngIf="emptyCart" class="row">
+    <p class="lead">
         Your cart is empty.
     </p>
 </div>
-<div *ngIf="emptyCart===false">
-
-    <div *ngFor="let line of model.lines;">
-        Event: {{line.event.name}}
-        <br />
-        Date: {{line.event.date | date: 'MM/dd/yyyy'}}
-        <br />
-
-        <div *ngFor="let ticket of line.tickets;">
-            Section: {{ticket.section}}
-            Row: {{ticket.row}}
-            Seat: {{ticket.seat}}
-            Cost: {{ticket.cost}}
+<div *ngIf="emptyCart===false" class="row">
+    <div class="col-xs-12" *ngIf="isOrderComplete">
+        <p class="lead">Thank you for ordering!</p>
+    </div>
+    <div *ngFor="let line of model.lines;" class="col-xs-12">
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>{{line.event.name}}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-2 col-md-4">
+                <p class="lead">Date: {{line.event.date | date: 'MM/dd/yyyy'}}</p>
+            </div>
+            <div class="col-md-4">
+                <p class="lead">Time: {{line.event.date | date: 'h:mm:ss a'}}</p>
+            </div>
+        </div>
+        <div *ngFor="let ticket of line.tickets;" class="row">
+            <div class="col-md-offset-3 col-md-3 col-xs-6">
+                <p><label>Section:</label> {{ticket.section}}</p>
+            </div>
+            <div class="col-md-2  col-xs-6">
+                <p><label>Row:</label> {{ticket.row}}</p>
+            </div>
+            <div class="col-md-2  col-xs-6">
+                <p><label>Seat:</label> {{ticket.seat}}</p>
+            </div>
+            <div class="col-md-2  col-xs-6">
+                <p><label>Cost:</label> ${{ticket.cost}}</p>
+            </div>
         </div>
     </div>
-
-    <p>Total: {{ model.total }}</p>
-
-
+    <div class="row">
+        <div class="col-md-offset-10 col-md-2 col-xs-offset-6 col-xs-6">
+            <p class="lead"><label>Total:</label> ${{ model.total }}</p>
+        </div>
+    </div>
     <div *ngIf="isOrderComplete===false">
-        <div *ngIf="isCheckingOut===false">
-            <button class="btn" (click)="initCheckout()">Checkout</button>
+        <div *ngIf="isCheckingOut===false" class="row">
+            <div class="col-md-offset-10 col-md-2 col-xs-offset-6 col-xs-6">
+                <button class="btn btn-primary" (click)="initCheckout()">Checkout</button>
+            </div>
         </div>
         <div *ngIf="isCheckingOut">
-            <label>Credit Card Number</label><input type="text" />
-            <label>Expiration</label>
-            <select>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>10</option>
-                <option>11</option>
-                <option>12</option>
-            </select>
-            <select>
-                <option>2017</option>
-                <option>2018</option>
-                <option>2019</option>
-                <option>2020</option>
-                <option>2021</option>
-                <option>2022</option>
-                <option>2023</option>
-                <option>2024</option>
-                <option>2025</option>
-                <option>2026</option>
-                <option>2027</option>
-            </select>
-
-            <label>Will Call</label><input type="radio" name="shipType" value="0">
-            <label>Shipped</label><input type="radio" name="shipType" value="1">
-
-            <button class="btn" (click)="placeOrder()">Place order</button>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="creditcard">Credit Card Number</label>
+                        <input class="form-control" type="text" id="creditcard" name="creditcard"/>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="expirationmonth">Expiration Month</label>
+                        <select class="form-control" id="expirationmonth" name="expirationmonth">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                            <option>11</option>
+                            <option>12</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="expirationyear">Expiration Year</label>
+                        <select class="form-control" type="text" id="expirationyear" name="expirationyear">
+                            <option>2017</option>
+                            <option>2018</option>
+                            <option>2019</option>
+                            <option>2020</option>
+                            <option>2021</option>
+                            <option>2022</option>
+                            <option>2023</option>
+                            <option>2024</option>
+                            <option>2025</option>
+                            <option>2026</option>
+                            <option>2027</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <fieldset>
+                        <legend>Shipment Type</legend>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <label class="radio-inline">
+                                    <input type="radio" name="shipType" id="shipTypeWillCall" value="0"> Will Call
+                                </label>
+                            </div>
+                            <div class="col-xs-6">
+                                <label class="radio-inline">
+                                    <input type="radio" name="shipType" id="shipTypeShipped" value="1"> Shipped
+                                </label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 col-md-offset-10">
+                    <button class="btn btn-primary" (click)="placeOrder()">Place order</button>
+                </div>
+            </div>
         </div>
-    </div>
-
-    <div *ngIf="isOrderComplete">
-        <p>Thank you for ordering!</p>
     </div>
 </div>

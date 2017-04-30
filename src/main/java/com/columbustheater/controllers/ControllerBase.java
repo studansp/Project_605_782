@@ -99,9 +99,15 @@ public class ControllerBase {
             result = new Order();
             result.setAccount(account);
 
-            em.getTransaction().begin();
-            em.persist(result);
-            em.getTransaction().commit();
+            try{
+                em.getTransaction().begin();
+                em.persist(result);
+                em.getTransaction().commit();
+            } catch(Exception ex2) {
+                if(em.getTransaction().isActive())
+                    em.getTransaction().rollback();
+            }
+
         }
 
         return result;

@@ -8,6 +8,8 @@ import java.util.Date;
 @Entity
 @Table(name = "events")
 public class Event extends ModelBase {
+    @Column
+    private String description;
 
     @Column
     private String name;
@@ -40,5 +42,13 @@ public class Event extends ModelBase {
 
     public void setImageurl(String imageurl) {
         this.imageurl = imageurl;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

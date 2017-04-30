@@ -3,7 +3,6 @@ import {TicketModel} from "./TicketModel";
 import {OrderLineModel} from "./OrderLineModel";
 export class OrderModel {
     public lines:Array<OrderLineModel>;
-
     get total():number {
         var sum:number=0;
 
@@ -12,7 +11,6 @@ export class OrderModel {
                 sum+=this.lines[i].getCost();
             }
         }
-
         return sum;
     }
 }

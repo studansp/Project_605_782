@@ -3,6 +3,7 @@ import {OrderModel} from "./models/OrderModel";
 import {Router} from "@angular/router";
 import {ApiService} from "./ApiService";
 import {OrderLineModel} from "./models/OrderLineModel";
+import {TicketModel} from "./models/TicketModel";
 
 @Component({
     selector: 'cart',
@@ -21,7 +22,20 @@ export class CartComponent {
             router.navigateByUrl('/login');
         } else {
             apiService.getCart()
-                .subscribe(m => {this.model=m.model;}, e => { router.navigateByUrl('/login'); });
+                .subscribe(m => {
+                    for(var i=0;i<m.model.lines.length;i++) {
+                        var rawLine = m.model.lines[i];
+                        var line:OrderLineModel = new OrderLineModel();
+                        line.event = rawLine.event;
+                        line.tickets = new Array<TicketModel>();
+
+                        for(var j=0;j<rawLine.tickets.length;j++) {
+                            line.tickets.push(rawLine.tickets[j]);
+                        }
+
+                        this.model.lines.push(line);
+                    }
+                }, e => { router.navigateByUrl('/login'); });
         }
     }
 

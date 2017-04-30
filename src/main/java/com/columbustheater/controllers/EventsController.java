@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -26,6 +27,9 @@ public class EventsController extends ControllerBase {
 
         eventCriteriaQuery.select(root);
         List<Event> result = em.createQuery( eventCriteriaQuery ).getResultList();
+
+        Collections.sort(result, (a, b) -> b.getDate().compareTo(a.getDate()));
+        Collections.reverse(result);
 
         return new Response<>(result);
     }

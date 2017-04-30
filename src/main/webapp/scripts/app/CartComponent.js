@@ -12,6 +12,7 @@ var core_1 = require("@angular/core");
 var OrderModel_1 = require("./models/OrderModel");
 var router_1 = require("@angular/router");
 var ApiService_1 = require("./ApiService");
+var OrderLineModel_1 = require("./models/OrderLineModel");
 var CartComponent = (function () {
     function CartComponent(apiService, router) {
         var _this = this;
@@ -26,7 +27,18 @@ var CartComponent = (function () {
         }
         else {
             apiService.getCart()
-                .subscribe(function (m) { _this.model = m.model; }, function (e) { router.navigateByUrl('/login'); });
+                .subscribe(function (m) {
+                for (var i = 0; i < m.model.lines.length; i++) {
+                    var rawLine = m.model.lines[i];
+                    var line = new OrderLineModel_1.OrderLineModel();
+                    line.event = rawLine.event;
+                    line.tickets = new Array();
+                    for (var j = 0; j < rawLine.tickets.length; j++) {
+                        line.tickets.push(rawLine.tickets[j]);
+                    }
+                    _this.model.lines.push(line);
+                }
+            }, function (e) { router.navigateByUrl('/login'); });
         }
     }
     CartComponent.prototype.initCheckout = function () {

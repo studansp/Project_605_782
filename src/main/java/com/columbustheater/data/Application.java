@@ -11,9 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.math.BigDecimal;
-import java.util.Currency;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 @SpringBootApplication
 @ComponentScan(basePackageClasses = AuthController.class)
@@ -83,8 +81,8 @@ public class Application extends SpringBootServletInitializer {
             Section[] newSections = new Section[]{ orchestra, mezzanine, balcony};
             em.getTransaction().begin();
 
-            for(int row=0;row<20;row++) {
-                for (int seat=0;seat<20;seat++) {
+            for(int row=1;row<=20;row++) {
+                for (int seat=1;seat<=20;seat++) {
                     for (Section currentSection : newSections) {
                         Seat newSeat = new Seat();
                         newSeat.setRow(row);
@@ -111,28 +109,193 @@ public class Application extends SpringBootServletInitializer {
         List<Seat> allSeats = em.createQuery(seatsCriteriaQuery).getResultList();
 
         if(events.isEmpty()) {
-            Event event = new Event();
-            event.setName("Brian Ferry");
-            event.setDate(new GregorianCalendar(2017, 5, 20, 20, 0).getTime());
-            event.setImageurl("http://media.ticketmaster.com/en-us/dam/a/c90/53cd884a-a01d-4498-8804-be67b086bc90_95181_EVENT_DETAIL_PAGE_16_9.jpg");
+            Map<Event, BigDecimal> seedEvents = getAllEvents();
 
             em.getTransaction().begin();
 
-            for (Seat eventSeat :
-                    allSeats) {
-                Ticket eventTicket = new Ticket();
-                eventTicket.setEvent(event);
-                eventTicket.setSeat(eventSeat);
-                BigDecimal cost = new BigDecimal(10);
-                eventTicket.setCost(cost);
-                em.persist(eventTicket);
+            for (Map.Entry<Event, BigDecimal> event :
+                    seedEvents.entrySet()) {
+
+                for (Seat eventSeat :
+                        allSeats) {
+                    Ticket eventTicket = new Ticket();
+                    eventTicket.setEvent(event.getKey());
+                    eventTicket.setSeat(eventSeat);
+                    BigDecimal cost = event.getValue();
+                    eventTicket.setCost(cost);
+                    em.persist(eventTicket);
+                }
+
+                em.persist(event.getKey());
+
             }
 
-            em.persist(event);
             em.getTransaction().commit();
         }
-
     }
+
+    static Map<Event, BigDecimal> getAllEvents() {
+        Map<Event, BigDecimal> events = new HashMap<>();
+
+        Event event = new Event();
+        event.setName("The Lion King");
+        event.setDate(new GregorianCalendar(2017, 5, 17, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/3/31/BuyiZama_Rafiki_Taiwan.jpg");
+        event.setDescription("A remake of the classic broadway play.  Performed by the Columbus Association of Fine Arts.");
+
+        events.put(event, new BigDecimal(10));
+
+        event = new Event();
+        event.setName("The Lion King");
+        event.setDate(new GregorianCalendar(2017, 5, 19, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/3/31/BuyiZama_Rafiki_Taiwan.jpg");
+        event.setDescription("A remake of the classic broadway play.  Performed by the Columbus Association of Fine Arts.");
+        events.put(event, new BigDecimal(10));
+
+        event = new Event();
+        event.setName("Romeo and Juliet");
+        event.setDate(new GregorianCalendar(2017, 5, 24, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/6/6a/Rigaud-RomeoJuliet.jpg");
+        event.setDescription("Classical Shakespearean play.  Performed by the Columbus Association of Fine Arts.");
+        events.put(event, new BigDecimal(10));
+
+        event = new Event();
+        event.setName("Romeo and Juliet");
+        event.setDate(new GregorianCalendar(2017, 5, 26, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/6/6a/Rigaud-RomeoJuliet.jpg");
+        event.setDescription("Classical Shakespearean play.  Performed by the Columbus Association of Fine Arts.");
+        events.put(event, new BigDecimal(10));
+
+        event = new Event();
+        event.setName("Hamlet");
+        event.setDate(new GregorianCalendar(2017, 5, 31, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/3/38/John_Gilbert_-_Hamlet_in_the_Presence_of_His_Father%27s_Ghost.JPG");
+        event.setDescription("Classical Shakespearean play.  Performed by the Columbus Association of Fine Arts.");
+        events.put(event, new BigDecimal(10));
+
+
+        event = new Event();
+        event.setName("Hamlet");
+        event.setDate(new GregorianCalendar(2017, 6, 2, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/3/38/John_Gilbert_-_Hamlet_in_the_Presence_of_His_Father%27s_Ghost.JPG");
+        event.setDescription("Classical Shakespearean play.  Performed by the Columbus Association of Fine Arts.");
+        events.put(event, new BigDecimal(10));
+
+        event = new Event();
+        event.setName("Book of Mormon");
+        event.setDate(new GregorianCalendar(2017, 6, 7, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/e/e5/Mormon-book.jpg");
+        event.setDescription("See Matt Stone and Trey Parker's award winning musical.");
+        events.put(event, new BigDecimal(60));
+
+        event = new Event();
+        event.setName("Book of Mormon");
+        event.setDate(new GregorianCalendar(2017, 6, 9, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/e/e5/Mormon-book.jpg");
+        event.setDescription("See Matt Stone and Trey Parker's award winning musical.");
+        events.put(event, new BigDecimal(60));
+
+        event = new Event();
+        event.setName("The Rolling Stones");
+        event.setDate(new GregorianCalendar(2017, 6, 14, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/b/b3/Rolling_Stones_22.jpg");
+        event.setDescription("They're old.  They're still performing.");
+        events.put(event, new BigDecimal(80));
+
+        event = new Event();
+        event.setName("The Rolling Stones");
+        event.setDate(new GregorianCalendar(2017, 6, 16, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/b/b3/Rolling_Stones_22.jpg");
+        event.setDescription("They're old.  They're still performing.");
+        events.put(event, new BigDecimal(80));
+
+        event = new Event();
+        event.setName("Dave Chappelle");
+        event.setDate(new GregorianCalendar(2017, 6, 21, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/7/78/Dave_Chappelle_%28cropped%29.jpg");
+        event.setDescription("The famous standup comedian, best known from his Comedy Central series Chappelle's show, is back.");
+        events.put(event, new BigDecimal(80));
+
+        event = new Event();
+        event.setName("Dave Chappelle");
+        event.setDate(new GregorianCalendar(2017, 6, 23, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/7/78/Dave_Chappelle_%28cropped%29.jpg");
+        event.setDescription("The famous standup comedian, best known from his Comedy Central series Chappelle's show, is back.");
+        events.put(event, new BigDecimal(80));
+
+        event = new Event();
+        event.setName("Hamilton");
+        event.setDate(new GregorianCalendar(2017, 6, 28, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/9/92/Lin-Manuel_Miranda_in_Hamilton.jpg");
+        event.setDescription("Today's most hyped musical.");
+        events.put(event, new BigDecimal(100));
+
+        event = new Event();
+        event.setName("Hamilton");
+        event.setDate(new GregorianCalendar(2017, 6, 30, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/9/92/Lin-Manuel_Miranda_in_Hamilton.jpg");
+        event.setDescription("Today's most hyped musical.");
+        events.put(event, new BigDecimal(100));
+
+        event = new Event();
+        event.setName("Alan Watson");
+        event.setDate(new GregorianCalendar(2017, 7, 5, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/c/c9/Alanwatsonmagician.jpg");
+        event.setDescription("Alan hsa been called the World's Best Magician. (By me, right now)");
+        events.put(event, new BigDecimal(8));
+
+        event = new Event();
+        event.setName("Alan Watson");
+        event.setDate(new GregorianCalendar(2017, 7, 7, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/c/c9/Alanwatsonmagician.jpg");
+        event.setDescription("Alan hsa been called the World's Best Magician. (By me, right now)");
+        events.put(event, new BigDecimal(8));
+
+        event = new Event();
+        event.setName("Midsummer Night's Dream");
+        event.setDate(new GregorianCalendar(2017, 7, 12, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/d/d7/Midsummer_Night%27s_Dream_Henry_Fuseli2.jpg");
+        event.setDescription("Classical Shakespearean play.  Performed by the Columbus Association of Fine Arts.");
+        events.put(event, new BigDecimal(10));
+
+        event = new Event();
+        event.setName("Midsummer Night's Dream");
+        event.setDate(new GregorianCalendar(2017, 7, 14, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/d/d7/Midsummer_Night%27s_Dream_Henry_Fuseli2.jpg");
+        event.setDescription("Classical Shakespearean play.  Performed by the Columbus Association of Fine Arts.");
+        events.put(event, new BigDecimal(10));
+
+        event = new Event();
+        event.setName("NerdCon");
+        event.setDate(new GregorianCalendar(2017, 7, 19, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/2/24/Cosplay_2_1_604804.jpg");
+        event.setDescription("Nerds come to trade comics, play Minecraft and stuff.");
+        events.put(event, new BigDecimal(120));
+
+        event = new Event();
+        event.setName("NerdCon");
+        event.setDate(new GregorianCalendar(2017, 7, 21, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/2/24/Cosplay_2_1_604804.jpg");
+        event.setDescription("Nerds come to trade comics, play Minecraft and stuff.");
+        events.put(event, new BigDecimal(120));
+
+        event = new Event();
+        event.setName("Ghasiram Kotwal");
+        event.setDate(new GregorianCalendar(2017, 7, 26, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/f/f2/Ghashiram_Kotwal_play_%284%29.JPG");
+        event.setDescription("Famous Indian musical.  Performed by the Columbus Association of Fine Arts.");
+        events.put(event, new BigDecimal(10));
+
+        event = new Event();
+        event.setName("Ghasiram Kotwal");
+        event.setDate(new GregorianCalendar(2017, 7, 28, 20, 0).getTime());
+        event.setImageurl("https://upload.wikimedia.org/wikipedia/commons/f/f2/Ghashiram_Kotwal_play_%284%29.JPG");
+        event.setDescription("Famous Indian musical.  Performed by the Columbus Association of Fine Arts.");
+        events.put(event, new BigDecimal(10));
+
+        return events;
+    }
+
 
     private static SpringApplicationBuilder configureApplication(SpringApplicationBuilder builder) {
         setupHibernate();
