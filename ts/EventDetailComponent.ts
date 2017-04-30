@@ -17,13 +17,18 @@ export class EventDetailComponent {
     @ViewChild('chooseyourseats') chooseyourseats:ChooseYourSeatsComponent;
 
     ngOnInit() {
-        this.route.params.subscribe(params => {
-            this.chooseyourseats.eventId = params['id'];
-            this.apiService.getEvent(params['id'])
-                .subscribe(m => {
-                    this.event = m.model;
-                }, e => { this.router.navigateByUrl("/home"); });
-        });
+        if(this.apiService.isAuthenticated()==false) {
+            this.router.navigateByUrl('/login');
+        } else {
+            this.route.params.subscribe(params => {
+                this.chooseyourseats.eventId = params['id'];
+                this.apiService.getEvent(params['id'])
+                    .subscribe(m => {
+                        this.event = m.model;
+                    }, e => { this.router.navigateByUrl("/home"); });
+            });
+
+        }
     }
 
     toggleChooseYourSeats() {

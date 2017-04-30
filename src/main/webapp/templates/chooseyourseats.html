@@ -1,4 +1,4 @@
-<div class="col-md-offset-6 col-md-3">
+<div class="col-md-offset-6 col-md-3" [hidden]="selectedSeats.length===0">
     <button (click)="addToCart()" class="btn btn-primary">Add to Cart</button>
 </div>
 <div class="col-md-12">

@@ -90,8 +90,9 @@ var ChooseYourSeatsComponent = (function () {
         }
     };
     ChooseYourSeatsComponent.prototype.handleCanvasClick = function (pointerEvent) {
-        var x = pointerEvent.pageX - this.canvas.offsetLeft - this.mouseHandler.getOffsetX();
-        var y = pointerEvent.pageY - this.canvas.offsetTop - this.mouseHandler.getOffsetY();
+        var rect = this.canvas.getBoundingClientRect();
+        var x = pointerEvent.clientX - rect.left - this.mouseHandler.getOffsetX();
+        var y = pointerEvent.clientY - rect.top - this.mouseHandler.getOffsetY();
         if (this.selectedSection == null) {
             this.handleSectionViewClick(x, y);
         }

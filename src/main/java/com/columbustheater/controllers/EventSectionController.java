@@ -21,7 +21,9 @@ public class EventSectionController extends ControllerBase {
     @ResponseBody
     public Response<TicketModel[]> get(@RequestParam(value="id") int id, @RequestParam(value="eventId") int eventId) {
         DataContext context = getDataContext();
+        context.getSession().clear();
         EntityManager em = context.getEntityManager();
+        em.clear();
         CriteriaBuilder builder = context.getCriteriaBuilder();
 
         CriteriaQuery<Ticket> ticketCriteriaQuery = builder.createQuery(Ticket.class);

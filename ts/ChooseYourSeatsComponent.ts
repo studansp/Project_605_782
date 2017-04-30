@@ -24,7 +24,7 @@ export class ChooseYourSeatsComponent {
     private ctx: ContextContainer;
     private canvasId = "seatsCanvas";
     private mouseHandler: MouseHandler;
-    private selectedSeats: Set<Seat> = new Set<Seat>();
+    public selectedSeats: Set<Seat> = new Set<Seat>();
 
     constructor(private apiService:ApiService, private router:Router) {
     }
@@ -104,8 +104,10 @@ export class ChooseYourSeatsComponent {
     }
 
     private handleCanvasClick(pointerEvent: PointerEvent) {
-        var x = pointerEvent.pageX-this.canvas.offsetLeft - this.mouseHandler.getOffsetX();
-        var y = pointerEvent.pageY-this.canvas.offsetTop - this.mouseHandler.getOffsetY();
+        var rect = this.canvas.getBoundingClientRect();
+
+        var x = pointerEvent.clientX-rect.left - this.mouseHandler.getOffsetX();
+        var y = pointerEvent.clientY-rect.top - this.mouseHandler.getOffsetY();
 
         if (this.selectedSection == null) {
             this.handleSectionViewClick(x, y);

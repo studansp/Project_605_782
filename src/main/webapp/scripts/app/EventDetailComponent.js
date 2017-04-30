@@ -25,13 +25,18 @@ var EventDetailComponent = (function () {
     }
     EventDetailComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.route.params.subscribe(function (params) {
-            _this.chooseyourseats.eventId = params['id'];
-            _this.apiService.getEvent(params['id'])
-                .subscribe(function (m) {
-                _this.event = m.model;
-            }, function (e) { _this.router.navigateByUrl("/home"); });
-        });
+        if (this.apiService.isAuthenticated() == false) {
+            this.router.navigateByUrl('/login');
+        }
+        else {
+            this.route.params.subscribe(function (params) {
+                _this.chooseyourseats.eventId = params['id'];
+                _this.apiService.getEvent(params['id'])
+                    .subscribe(function (m) {
+                    _this.event = m.model;
+                }, function (e) { _this.router.navigateByUrl("/home"); });
+            });
+        }
     };
     EventDetailComponent.prototype.toggleChooseYourSeats = function () {
         this.orderByQuantity = !this.orderByQuantity;
