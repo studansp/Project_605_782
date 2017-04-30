@@ -48,10 +48,6 @@ public class AccountController extends ControllerBase {
             return result;
         }
 
-        currentAccount.setEmail(account.getEmail());
-        currentAccount.setAddress1(account.getAddress1());
-        currentAccount.setAddress2(account.getAddress2());
-        currentAccount.setName(account.getName());
 
         DataContext context = getDataContext();
         EntityManager em = context.getEntityManager();
@@ -61,7 +57,13 @@ public class AccountController extends ControllerBase {
             if(em.getTransaction().isActive()==false)
                 em.getTransaction().begin();
 
-            context.getSession().save(currentAccount);
+            currentAccount = em.find(Account.class, currentAccount.getId());
+
+            currentAccount.setEmail(account.getEmail());
+            currentAccount.setAddress1(account.getAddress1());
+            currentAccount.setAddress2(account.getAddress2());
+            currentAccount.setName(account.getName());
+
             em.getTransaction().commit();
         } catch(Exception ex) {
             if(em.getTransaction().isActive())
