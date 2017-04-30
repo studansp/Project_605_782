@@ -1,43 +1,70 @@
 <h1>Event Detail</h1>
 
-Event: {{event.name}}
-<br/>
-<img src="{{ event.imageurl }}" />
-
-<br/>
-Date: {{event.date | date: 'MM/dd/yyyy'}}
-<br/>
-Time: {{event.date | date: 'h:mm:ss a'}}
-<br/>
-
-<form *ngIf="orderByQuantity" (ngSubmit)="addQuantityToCart()">
-    <fieldset>
-        <legend>Order</legend>
-        Quantity:
-
-        <select [(ngModel)]="quantity" name="quantity" >
-            <option>1</option>
-            <option selected>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            <option>6</option>
-            <option>7</option>
-            <option>8</option>
-            <option>9</option>
-            <option>10</option>
-        </select>
-
-        <button type="submit">Add to Cart</button>
-        <br />
-        <button (click)="toggleChooseYourSeats()">Choose your seats</button>
+<div class="row">
+    <fieldset class="col-xs-12">
+        <div class="row">
+            <div class="col-xs-12">
+                <legend>{{event.name}}</legend>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <div class="col-xs-12">
+                    <img class='img-thumbnail' src="{{ event.imageurl }}" />
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p class="lead">Date: {{event.date | date: 'MM/dd/yyyy'}}
+                        <br/>
+                            Time: {{event.date | date: 'h:mm:ss a'}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <form *ngIf="orderByQuantity" (ngSubmit)="addQuantityToCart()">
+                    <fieldset>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <legend>Order</legend>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class='col-md-12'>
+                                <div class="form-group">
+                                    <label for="quantity">Quantity</label>
+                                    <select [(ngModel)]="quantity" name="quantity" id="quantity" >
+                                        <option>1</option>
+                                        <option selected>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                        <option>6</option>
+                                        <option>7</option>
+                                        <option>8</option>
+                                        <option>9</option>
+                                        <option>10</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <button (click)="toggleChooseYourSeats()" class="btn btn-secondary">Choose your seats</button>
+                            </div>
+                            <div class="col-md-offset-6 col-md-3">
+                                <button type="submit" class="btn btn-primary">Add to Cart</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+                <div class="row" [hidden]="orderByQuantity===true">
+                    <div class="col-md-3">
+                        <button (click)="toggleChooseYourSeats()" class="btn btn-secondary">Order by Quantity</button>
+                    </div>
+                    <chooseyourseats  #chooseyourseats></chooseyourseats>
+                </div>
+            </div>
+        </div>
     </fieldset>
-
-</form>
-
-<div [hidden]="orderByQuantity===true">
-    <button (click)="toggleChooseYourSeats()">Order by Quantity</button>
-    <chooseyourseats  #chooseyourseats></chooseyourseats>
 </div>
-
-

@@ -35,3 +35,7 @@ h2 {
 .carousel-control {
     border-radius: 100px;
 }
+
+canvas {
+    border: 1px solid black;
+}
