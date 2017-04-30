@@ -1,9 +1,32 @@
+<div class="row">
+    <div class="col-xs-12">
+        <h1>Login</h1>
+    </div>
+</div>
+
 <form (ngSubmit)="onSubmit()" method="post">
-    <label>Username</label><input type="text" [(ngModel)]="model.username" name="username"/>
-    <br />
-    <label>Password</label><input type="password" [(ngModel)]="model.password" name="password"/>
-    <br />
-    <button type="submit">Submit</button>
-    <br />
-    <a href="/createaccount" routerLink="/createaccount" >Create Account</a>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input class="form-control" type="text" [(ngModel)]="model.username" id="username" name="username"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input class="form-control" type="password" [(ngModel)]="model.password" id="password" name="password"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <a href="/createaccount" routerLink="/createaccount" >Create Account</a>
+        </div>
+        <div class="col-md-offset-6 col-md-3">
+            <button  class="btn btn-primary" type="submit">Submit</button>
+        </div>
+    </div>
 </form>

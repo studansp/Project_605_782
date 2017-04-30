@@ -1,17 +1,61 @@
+<div class="row">
+    <div class="col-xs-12">
+        <h1>Create Account</h1>
+    </div>
+</div>
 <form (ngSubmit)="createAccount()" method="post">
-    <label>Username</label><input type="text" [(ngModel)]="model.username" name="username"/>
-    <br/>
-    <label>Name</label><input type="text" [(ngModel)]="model.name" name="name"/>
-    <br/>
-    <label>Email</label><input type="email" [(ngModel)]="model.email" name="email"/>
-    <br/>
-    <label>Address 1</label><input type="text" [(ngModel)]="model.address1" name="address1"/>
-    <br/>
-    <label>Address 2</label><input type="text" [(ngModel)]="model.address2" name="address2"/>
-    <br/>
-    <label>Password</label><input type="password" [(ngModel)]="model.password" name="password"/>
-    <br/>
-    <label>Confirm Password</label><input type="password" [(ngModel)]="model.confirmpassword" name="confirmpassword"/>
-    <br/>
-    <button type="submit">Submit</button>
+    <div class="row">
+        <div class='col-md-6'>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input class="form-control" type="text" [(ngModel)]="model.username" id="username" name="username"/>
+            </div>
+        </div>
+        <div class='col-md-6'>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input class="form-control" type="email" [(ngModel)]="model.email" id="email" name="email"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class='col-md-6'>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input class="form-control" type="password" [(ngModel)]="model.password" id="password" name="password"/>
+            </div>
+        </div>
+        <div class='col-md-6'>
+            <div class="form-group">
+                <label for="confirmpassword">Confirm Password</label>
+                <input class="form-control" type="password" [(ngModel)]="model.confirmpassword" id="confirmpassword" name="confirmpassword"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input class="form-control" type="text" [(ngModel)]="model.name" id="name" name="name"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class='col-md-6'>
+            <div class="form-group">
+                <label for="address1">Address 1</label>
+                <input class="form-control" type="text" [(ngModel)]="model.address1" id="address1" name="address1"/>
+            </div>
+        </div>
+        <div class='col-md-6'>
+            <div class="form-group">
+                <label for="address2">Address 2</label>
+                <input class="form-control" type="text" [(ngModel)]="model.address2" id="address2" name="address2"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-md-offset-9">
+            <button type="submit" class="btn btn-primary">Submit</button></div>
+    </div>
 </form>
