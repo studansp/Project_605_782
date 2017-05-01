@@ -1,0 +1,61 @@
+<h1>Edit Event</h1>
+<form (ngSubmit)="save()" #eventForm='ngForm' >
+    <div class='row'>
+        <div class='col-md-6' >
+            <div class='form-group' [ngClass]="{'has-error': isActive, 'has-error': name.errors && (name.dirty || name.touched)}">
+                <label class="control-label" for="name">Name</label>
+                <input type="text" id="name" class="form-control" required name="name" [(ngModel)]="model.name" #name="ngModel"  />
+                <div *ngIf="name.errors && (name.dirty || name.touched)"
+                     class="alert alert-danger">
+                    <div [hidden]="!name.errors.required">
+                        Name is required
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='col-md-6' >
+            <div class='form-group' [ngClass]="{'has-error': isActive, 'has-error': date.errors && (date.dirty || date.touched)}">
+                <label class="control-label" for="date">Date</label>
+                <input pattern="20[0-9][0-9]-[0-1][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]" [ngModel]="model.date | date:'yyyy-MM-dd hh:mm'" (ngModelChange)="model.date = getDate($event)" type="datetime" id="date" class="form-control" required name="date" #date="ngModel"  />
+                <div *ngIf="date.errors && (date.dirty || date.touched)"
+                     class="alert alert-danger">
+                    <div [hidden]="!date.errors.required">
+                        Date is required
+                    </div>
+                    <div [hidden]="date.errors.required">
+                        Please enter a date in format YYYY-MM-DD HH:MM
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='col-xs-12' >
+            <div class='form-group' [ngClass]="{'has-error': isActive, 'has-error': imageurl.errors && (imageurl.dirty || imageurl.touched)}">
+                <label class="control-label" for="imageurl">Image Url</label>
+                <input type="text" id="imageurl" class="form-control" required name="imageurl" [(ngModel)]="model.imageurl" #imageurl="ngModel"  />
+                <div *ngIf="imageurl.errors && (imageurl.dirty || imageurl.touched)"
+                     class="alert alert-danger">
+                    <div [hidden]="!imageurl.errors.required">
+                        Image url is required
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='col-xs-12' >
+            <div class='form-group' [ngClass]="{'has-error': isActive, 'has-error': description.errors && (description.dirty || description.touched)}">
+                <label class="control-label" for="description">Description</label>
+                <textarea id="description" class="form-control" required name="description" [(ngModel)]="model.description" #description="ngModel"></textarea>
+                <div *ngIf="description.errors && (description.dirty || description.touched)"
+                     class="alert alert-danger">
+                    <div [hidden]="!description.errors.required">
+                        Description is required
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class='btn btn-primary' type='submit' [disabled]='!eventForm.form.valid'>Submit</button>
+</form>

@@ -111,6 +111,10 @@ export class ApiService {
         return this.simplePostRequest<OrderModel>("/api/order", {});
     }
 
+    public updateEvent(model: EventModel):Observable<ApiResponse<EventModel>> {
+        return this.simplePutRequest<EventModel>("/api/event", model);
+    }
+
     private extractData<T>(res: Response):ApiResponse<T> {
         let result = new ApiResponse<T>();
         result.deserialize(res.json())

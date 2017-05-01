@@ -13,6 +13,10 @@
     <tr *ngFor="let event of events; let i = index;">
         <td>{{event.date | date: 'MM/dd/yyyy'}}</td>
         <td>{{event.name}}</td>
-        <td><a routerLink="/eventdetail/{{event.id}}">Buy Now</a></td>
+        <td>
+            <a routerLink="/eventdetail/{{event.id}}">Buy Now</a>
+            <br *ngIf="isAdmin"  />
+            <a *ngIf="isAdmin" routerLink="/eventedit/{{event.id}}">Edit</a>
+        </td>
     </tr>
 </table>

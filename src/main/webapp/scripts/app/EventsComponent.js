@@ -16,6 +16,7 @@ var EventsComponent = (function () {
         var _this = this;
         this.apiService = apiService;
         this.events = new Array();
+        this.isAdmin = (apiService.isAuthenticated() && apiService.getAccount().admin);
         apiService.getEvents()
             .subscribe(function (m) {
             for (var i = 0; i < m.model.length; i++) {

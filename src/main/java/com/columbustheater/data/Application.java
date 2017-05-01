@@ -56,9 +56,10 @@ public class Application extends SpringBootServletInitializer {
             Account account = new Account();
             account.setAddress1("123 Main St");
             account.setEmail("pstudans@gmail.com");
-            account.setPassword("password123");
-            account.setUsername("studansp");
+            account.setPassword("admin");
+            account.setUsername("admin");
             account.setName("Phillip Studans");
+            account.setAdmin(true);
 
             em.getTransaction().begin();
             em.persist(account);

@@ -20,6 +20,7 @@ var CartComponent_1 = require("./CartComponent");
 var CreateAccountComponent_1 = require("./CreateAccountComponent");
 var EventDetailComponent_1 = require("./EventDetailComponent");
 var ChooseYourSeatsComponent_1 = require("./ChooseYourSeatsComponent");
+var EventEditComponent_1 = require("./EventEditComponent");
 var appRoutes = [
     { path: 'home', component: HomeComponent_1.HomeComponent },
     { path: 'login', component: LoginComponent_1.LoginComponent },
@@ -28,6 +29,7 @@ var appRoutes = [
     { path: 'cart', component: CartComponent_1.CartComponent },
     { path: 'createaccount', component: CreateAccountComponent_1.CreateAccountComponent },
     { path: 'eventdetail/:id', component: EventDetailComponent_1.EventDetailComponent },
+    { path: 'eventedit/:id', component: EventEditComponent_1.EventEditComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
 var AppModule = (function () {
@@ -38,7 +40,8 @@ var AppModule = (function () {
 AppModule = __decorate([
     core_1.NgModule({
         imports: [platform_browser_1.BrowserModule, forms_1.FormsModule, http_1.HttpModule, http_1.JsonpModule, router_1.RouterModule.forRoot(appRoutes)],
-        declarations: [AppComponent_1.AppComponent, LoginComponent_1.LoginComponent, HomeComponent_1.HomeComponent, EventsComponent_1.EventsComponent, ProfileComponent_1.ProfileComponent, CartComponent_1.CartComponent, CreateAccountComponent_1.CreateAccountComponent, EventDetailComponent_1.EventDetailComponent, ChooseYourSeatsComponent_1.ChooseYourSeatsComponent],
+        declarations: [AppComponent_1.AppComponent, LoginComponent_1.LoginComponent, HomeComponent_1.HomeComponent, EventsComponent_1.EventsComponent, ProfileComponent_1.ProfileComponent,
+            CartComponent_1.CartComponent, CreateAccountComponent_1.CreateAccountComponent, EventDetailComponent_1.EventDetailComponent, ChooseYourSeatsComponent_1.ChooseYourSeatsComponent, EventEditComponent_1.EventEditComponent],
         bootstrap: [AppComponent_1.AppComponent],
         providers: [ApiService_1.ApiService]
     })

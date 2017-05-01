@@ -13,6 +13,7 @@ import {CartComponent} from "./CartComponent";
 import {CreateAccountComponent} from "./CreateAccountComponent";
 import {EventDetailComponent} from "./EventDetailComponent";
 import {ChooseYourSeatsComponent} from "./ChooseYourSeatsComponent";
+import {EventEditComponent} from "./EventEditComponent";
 
 const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -22,12 +23,14 @@ const appRoutes: Routes = [
     { path: 'cart', component: CartComponent },
     { path: 'createaccount', component: CreateAccountComponent },
     { path: 'eventdetail/:id', component: EventDetailComponent },
+    { path: 'eventedit/:id', component: EventEditComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full'}
 ];
 
 @NgModule({
     imports:      [ BrowserModule, FormsModule, HttpModule, JsonpModule, RouterModule.forRoot(appRoutes) ],
-    declarations: [ AppComponent, LoginComponent, HomeComponent, EventsComponent, ProfileComponent, CartComponent, CreateAccountComponent, EventDetailComponent, ChooseYourSeatsComponent ],
+    declarations: [ AppComponent, LoginComponent, HomeComponent, EventsComponent, ProfileComponent,
+        CartComponent, CreateAccountComponent, EventDetailComponent, ChooseYourSeatsComponent, EventEditComponent ],
     bootstrap:    [ AppComponent ],
     providers: [ ApiService ]
 })

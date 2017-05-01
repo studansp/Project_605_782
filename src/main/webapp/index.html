@@ -35,6 +35,29 @@
 </head>
 
 <body>
+<button id="errorModal" style='display:none;' type="button" data-toggle="modal" data-target=".error-modal-sm">Error Modal</button>
+<div class="modal fade error-modal-sm " tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content alert alert-danger">
+            <div class='row'>
+                <div class='col-xs-12'>
+                    <p class='lead'>
+                        <strong>Error</strong><span id='errorModalContent'></span>
+                    </p>
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col-xs-12'>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 <my-app>Loading AppComponent content here ...</my-app>
 
 </body>

@@ -7,4 +7,5 @@ export class AccountModel {
     public token:string;
     public password:string;
     public confirmpassword:string;
+    public admin:boolean;
 }

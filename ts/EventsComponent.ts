@@ -8,9 +8,12 @@ import {Router} from "@angular/router";
 })
 export class EventsComponent {
     public events:Array<EventModel>;
+    private isAdmin:boolean;
 
     constructor(private apiService:ApiService, router:Router) {
         this.events = new Array<EventModel>();
+
+        this.isAdmin=(apiService.isAuthenticated() && apiService.getAccount().admin);
 
         apiService.getEvents()
             .subscribe(m => {

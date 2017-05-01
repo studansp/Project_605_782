@@ -28,6 +28,9 @@ public class Account extends ModelBase {
     @Column(unique = true)
     private String email;
 
+    @Column
+    private boolean admin;
+
     public String getUsername() {
         return username;
     }
@@ -82,5 +85,13 @@ public class Account extends ModelBase {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 }
