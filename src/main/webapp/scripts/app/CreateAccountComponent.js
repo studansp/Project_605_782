@@ -21,14 +21,11 @@ var CreateAccountComponent = (function () {
     CreateAccountComponent.prototype.createAccount = function () {
         var _this = this;
         this.apiService.createAccount(this.model)
-            .subscribe(function (m) { return _this.handleResponse(m); }, function (e) { alert(e); });
+            .subscribe(function (m) { return _this.handleResponse(m); }, function (e) { });
     };
     CreateAccountComponent.prototype.handleResponse = function (response) {
         if (response.model != null) {
             this.router.navigateByUrl('/login');
-        }
-        else {
-            alert("Test error.");
         }
     };
     return CreateAccountComponent;

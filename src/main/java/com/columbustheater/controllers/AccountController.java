@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 @RestController
@@ -28,12 +30,20 @@ public class AccountController extends ControllerBase {
             em.persist(account);
             em.getTransaction().commit();
 
-        } catch (Exception ex) {
+        } catch(PersistenceException ex) {
+            Response<Account> response = new Response<>();
+            response.setMessage("Username already in use.");
+            return response;
+        }
+        catch (Exception ex) {
+            Response<Account> response = new Response<>();
+            response.setMessage("Unknown error.");
+            return response;
+        }
+        finally {
             EntityTransaction tran = em.getTransaction();
             if(tran.isActive())
                 tran.rollback();
-        }
-        finally {
             closeIfOpen(context);
         }
 

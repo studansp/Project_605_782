@@ -94,6 +94,9 @@ var ApiService = (function () {
     ApiService.prototype.extractData = function (res) {
         var result = new ApiResponse_1.ApiResponse();
         result.deserialize(res.json());
+        if (result.model == null) {
+            this.showError(result.message || "Unknown error");
+        }
         return result;
     };
     ApiService.prototype.handleError = function (error) {
@@ -106,9 +109,12 @@ var ApiService = (function () {
         else {
             errMsg = error.message ? error.message : error.toString();
         }
-        alert(errMsg);
-        console.error(errMsg);
+        this.showError(errMsg);
         return Observable_1.Observable.throw(errMsg);
+    };
+    ApiService.prototype.showError = function (message) {
+        document.getElementById('errorModalContent').innerHTML = message;
+        document.getElementById('errorModal').click();
     };
     ApiService.prototype.getHeaders = function () {
         var headers = new http_1.Headers();

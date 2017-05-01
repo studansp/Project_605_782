@@ -25,7 +25,7 @@ public class Account extends ModelBase {
     @Column
     private String address2;
 
-    @Column(unique = true)
+    @Column
     private String email;
 
     @Column

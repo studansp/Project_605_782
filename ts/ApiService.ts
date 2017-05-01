@@ -119,6 +119,10 @@ export class ApiService {
         let result = new ApiResponse<T>();
         result.deserialize(res.json())
 
+        if(result.model==null) {
+            this.showError(result.message || "Unknown error");
+        }
+
         return result;
     }
     private handleError (error: Response | any) {
@@ -130,9 +134,15 @@ export class ApiService {
         } else {
             errMsg = error.message ? error.message : error.toString();
         }
-        alert(errMsg);
-        console.error(errMsg);
+
+        this.showError(errMsg);
+
         return Observable.throw(errMsg);
+    }
+
+    private showError(message:string) {
+        document.getElementById('errorModalContent').innerHTML=message;
+        document.getElementById('errorModal').click();
     }
 
     private getHeaders():Headers {

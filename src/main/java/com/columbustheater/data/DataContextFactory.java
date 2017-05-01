@@ -36,7 +36,7 @@ public class DataContextFactory {
                 .setProperty("hibernate.connection.password", System.getenv("JHU_ROOT_PWD"))
                 .setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/GrantHillPizza?autoReconnect=true")
                 .setProperty("show_sql", "true")
-                .setProperty("hibernate.hbm2ddl.auto", "create")
+                .setProperty("hibernate.hbm2ddl.auto", "update")
                 .setProperty("hibernate.c3p0.timeout", "30")
                 .setProperty("hibernate.c3p0.max_size", "1000")
                 .setProperty("hibernate.c3p0.maxIdleTimeExcessConnections", "5")

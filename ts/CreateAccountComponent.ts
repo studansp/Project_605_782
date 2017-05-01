@@ -19,14 +19,12 @@ export class CreateAccountComponent {
 
     public createAccount():void {
         this.apiService.createAccount(this.model)
-            .subscribe(m => this.handleResponse(m), e => { alert(e)});
+            .subscribe(m => this.handleResponse(m), e => {});
     }
 
     private handleResponse(response: ApiResponse<AccountModel>) {
         if(response.model!=null) {
             this.router.navigateByUrl('/login');
-        } else {
-            alert("Test error.")
         }
     }
 }

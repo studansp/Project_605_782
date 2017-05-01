@@ -4,7 +4,6 @@ var ApiResponse = (function () {
     }
     ApiResponse.prototype.deserialize = function (input) {
         if (input) {
-            this.status = input.status;
             this.message = input.message;
             this.model = input.model;
         }
@@ -12,6 +11,5 @@ var ApiResponse = (function () {
     };
     return ApiResponse;
 }());
-ApiResponse.OK = 200;
 exports.ApiResponse = ApiResponse;
 //# sourceMappingURL=ApiResponse.js.map
