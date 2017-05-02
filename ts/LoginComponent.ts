@@ -25,8 +25,6 @@ export class LoginComponent {
         if(loginResponse.model!=null) {
             this.apiService.setAccount(loginResponse.model);
             this.router.navigateByUrl("/home");
-        } else {
-            alert("Invalid username or password");
         }
     }
 }

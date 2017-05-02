@@ -29,9 +29,6 @@ var LoginComponent = (function () {
             this.apiService.setAccount(loginResponse.model);
             this.router.navigateByUrl("/home");
         }
-        else {
-            alert("Invalid username or password");
-        }
     };
     return LoginComponent;
 }());

@@ -57,7 +57,9 @@ public class AuthController extends ControllerBase {
             return new Response<>(result);
 
         } catch(NoResultException ex) {
-            return new Response<>(null);
+            Response<Account> result = new Response<Account>();
+            result.setMessage("Invalid username or password.");
+            return result;
         }
         finally {
             closeIfOpen(context);
