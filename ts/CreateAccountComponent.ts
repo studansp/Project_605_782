@@ -18,6 +18,11 @@ export class CreateAccountComponent {
     }
 
     public createAccount():void {
+        if(this.model.password!=this.model.confirmpassword) {
+            this.apiService.showError('Passwords must match');
+            return;
+        }
+
         this.apiService.createAccount(this.model)
             .subscribe(m => this.handleResponse(m), e => {});
     }

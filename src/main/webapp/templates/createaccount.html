@@ -3,48 +3,85 @@
         <h1>Create Account</h1>
     </div>
 </div>
-<form (ngSubmit)="createAccount()" method="post">
+<form (ngSubmit)="createAccount()" method="post" #accountForm='ngForm'>
     <div class="row">
         <div class='col-md-6'>
-            <div class="form-group">
+            <div class="form-group" [ngClass]="{'has-error': username.errors && (username.dirty || username.touched)}">
                 <label for="username">Username</label>
-                <input class="form-control" type="text" [(ngModel)]="model.username" id="username" name="username"/>
+                <input class="form-control" type="text" [(ngModel)]="model.username" id="username" name="username" required #username="ngModel" />
+                <div *ngIf="username.errors && (username.dirty || username.touched)" class="alert alert-danger">
+                    <div [hidden]="!username.errors.required">
+                        Username is required
+                    </div>
+                </div>
             </div>
         </div>
         <div class='col-md-6'>
-            <div class="form-group">
+            <div class="form-group" [ngClass]="{'has-error': email.errors && (email.dirty || email.touched)}">
                 <label for="email">Email</label>
-                <input class="form-control" type="email" [(ngModel)]="model.email" id="email" name="email"/>
+                <input pattern=".*@.*\...*" required class="form-control" type="email" [(ngModel)]="model.email" id="email" name="email" #email="ngModel" />
+                <div *ngIf="email.errors && (email.dirty || email.touched)" class="alert alert-danger">
+                    <div [hidden]="!email.errors.required">
+                        Email is required
+                    </div>
+                    <div [hidden]="email.errors.required">
+                        Please enter a valid email address
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <div class="row">
         <div class='col-md-6'>
-            <div class="form-group">
+            <div class="form-group" [ngClass]="{'has-error': password.errors && (password.dirty || password.touched)}" >
                 <label for="password">Password</label>
-                <input class="form-control" type="password" [(ngModel)]="model.password" id="password" name="password"/>
+                <input required class="form-control" type="password" [(ngModel)]="model.password" id="password" name="password"   #password="ngModel" />
+                <div *ngIf="password.errors && (password.dirty || password.touched)"
+                     class="alert alert-danger">
+                    <div [hidden]="!password.errors.required">
+                        Password is required
+                    </div>
+                </div>
             </div>
         </div>
         <div class='col-md-6'>
-            <div class="form-group">
+            <div class="form-group" [ngClass]="{'has-error': confirmpassword.errors && (confirmpassword.dirty || confirmpassword.touched)}" >
                 <label for="confirmpassword">Confirm Password</label>
-                <input class="form-control" type="password" [(ngModel)]="model.confirmpassword" id="confirmpassword" name="confirmpassword"/>
+                <input required class="form-control" type="password" [(ngModel)]="model.confirmpassword" id="confirmpassword" name="confirmpassword"   #confirmpassword="ngModel" />
+                <div *ngIf="confirmpassword.errors && (confirmpassword.dirty || confirmpassword.touched)"
+                     class="alert alert-danger">
+                    <div [hidden]="!confirmpassword.errors.required">
+                        Password confirmation is required
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
-            <div class="form-group">
+            <div class="form-group" [ngClass]="{'has-error': name.errors && (name.dirty || name.touched)}">
                 <label for="name">Name</label>
-                <input class="form-control" type="text" [(ngModel)]="model.name" id="name" name="name"/>
+                <input required class="form-control" type="text" [(ngModel)]="model.name" id="name" name="name"  #name="ngModel" />
+                <div *ngIf="name.errors && (name.dirty || name.touched)"
+                     class="alert alert-danger">
+                    <div [hidden]="!name.errors.required">
+                        Name is required
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <div class="row">
         <div class='col-md-6'>
-            <div class="form-group">
+            <div class="form-group" [ngClass]="{'has-error': address1.errors && (address1.dirty || address1.touched)}">
                 <label for="address1">Address 1</label>
-                <input class="form-control" type="text" [(ngModel)]="model.address1" id="address1" name="address1"/>
+                <input required class="form-control" type="text" [(ngModel)]="model.address1" id="address1" name="address1"  #address1="ngModel" />
+                <div *ngIf="address1.errors && (address1.dirty || address1.touched)"
+                     class="alert alert-danger">
+                    <div [hidden]="!address1.errors.required">
+                        Address is required
+                    </div>
+                </div>
             </div>
         </div>
         <div class='col-md-6'>
@@ -56,6 +93,7 @@
     </div>
     <div class="row">
         <div class="col-md-3 col-md-offset-9">
-            <button type="submit" class="btn btn-primary">Submit</button></div>
+            <button type="submit" class="btn btn-primary" [disabled]='!accountForm.form.valid'>Submit</button></div>
     </div>
+
 </form>

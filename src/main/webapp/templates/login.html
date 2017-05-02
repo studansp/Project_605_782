@@ -7,10 +7,9 @@
 <form (ngSubmit)="onSubmit()" method="post" #loginForm='ngForm'>
     <div class="row">
         <div class="col-xs-12">
-            <div class="form-group">
+            <div class="form-group" [ngClass]="{'has-error': username.errors && (username.dirty || username.touched)}">
                 <label for="username">Username</label>
-                <input required class="form-control" type="text" [(ngModel)]="model.username" id="username" name="username"  #username="ngModel"
-                       [ngClass]="{'has-error': isActive, 'has-error': username.errors && (username.dirty || username.touched)}" />
+                <input required class="form-control" type="text" [(ngModel)]="model.username" id="username" name="username"  #username="ngModel" />
                 <div *ngIf="username.errors && (username.dirty || username.touched)"
                      class="alert alert-danger">
                     <div [hidden]="!username.errors.required">
@@ -22,10 +21,9 @@
     </div>
     <div class="row">
         <div class="col-xs-12">
-            <div class="form-group">
+            <div class="form-group" [ngClass]="{'has-error': password.errors && (password.dirty || password.touched)}" >
                 <label for="password">Password</label>
-                <input required class="form-control" type="password" [(ngModel)]="model.password" id="password" name="password"   #password="ngModel"
-                       [ngClass]="{'has-error': isActive, 'has-error': password.errors && (password.dirty || password.touched)}" />
+                <input required class="form-control" type="password" [(ngModel)]="model.password" id="password" name="password"   #password="ngModel" />
                 <div *ngIf="password.errors && (password.dirty || password.touched)"
                      class="alert alert-danger">
                     <div [hidden]="!password.errors.required">

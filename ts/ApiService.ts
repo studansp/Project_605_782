@@ -140,7 +140,7 @@ export class ApiService {
         return Observable.throw(errMsg);
     }
 
-    private showError(message:string) {
+    public showError(message:string) {
         document.getElementById('errorModalContent').innerHTML=message;
         document.getElementById('errorModal').click();
     }

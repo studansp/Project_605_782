@@ -117,6 +117,7 @@ public class CartItemController extends ControllerBase {
                     ticket.setOrder(null);
 
                     em.getTransaction().commit();
+                    response.setModel(true);
                     return response;
                 }
             }

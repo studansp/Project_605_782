@@ -20,6 +20,10 @@ var CreateAccountComponent = (function () {
     }
     CreateAccountComponent.prototype.createAccount = function () {
         var _this = this;
+        if (this.model.password != this.model.confirmpassword) {
+            this.apiService.showError('Passwords must match');
+            return;
+        }
         this.apiService.createAccount(this.model)
             .subscribe(function (m) { return _this.handleResponse(m); }, function (e) { });
     };
