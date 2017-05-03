@@ -32,6 +32,10 @@
     <script>
         System.import('scripts/app/main.js').catch(function(err){ console.error(err); });
     </script>
+    <script src="scripts/Success.js"></script>
+    <script type="text/javascript">
+        window.success = new Notify();
+    </script>
 </head>
 
 <body>
@@ -58,10 +62,9 @@
     </div>
 </div>
 
-
-
-
 <my-app>Loading AppComponent content here ...</my-app>
-
+<div id="successMessage" class="bg-success popup-success" style="display: none;">
+    <p class="lead"><span class="glyphicon glyphicon-ok"></span>&nbsp;Success</p>
+</div>
 </body>
 </html>

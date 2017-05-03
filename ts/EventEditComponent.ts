@@ -22,13 +22,13 @@ export class EventEditComponent {
                         this.model = m.model;
                     }, e => { this.router.navigateByUrl("/home"); });
             });
-
         }
     }
 
     public save():void {
         this.apiService.updateEvent(this.model)
             .subscribe(m => {
+                this.apiService.showSuccess();
                 this.model = m.model;
             }, e => { alert('Invalid event'); });
     }

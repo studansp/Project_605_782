@@ -13,7 +13,7 @@ if(typeof window.Notify == "undefined") {
 
                 if(active===0)
                     $('#successMessage').fadeOut('slow');
-            }, 5000);
+            }, 2500);
         }
     }
 }

@@ -16,6 +16,7 @@ var ProfileComponent = (function () {
     function ProfileComponent(apiService, router) {
         var _this = this;
         this.apiService = apiService;
+        this.orderHistory = new Array();
         this.model = new AccountModel_1.AccountModel();
         if (apiService.isAuthenticated() == false) {
             router.navigateByUrl('/login');
@@ -23,6 +24,8 @@ var ProfileComponent = (function () {
         else {
             apiService.getProfile()
                 .subscribe(function (m) { _this.model = m.model; }, function (e) { router.navigateByUrl('/login'); });
+            apiService.getOrders()
+                .subscribe(function (m) { _this.orderHistory = m.model; }, function (e) { });
         }
     }
     ProfileComponent.prototype.updateProfile = function () {
@@ -35,9 +38,7 @@ var ProfileComponent = (function () {
             this.model = response.model;
             this.model.token = this.apiService.getAccount().token;
             this.apiService.setAccount(this.model);
-        }
-        else {
-            alert("Test error.");
+            this.apiService.showSuccess();
         }
     };
     return ProfileComponent;

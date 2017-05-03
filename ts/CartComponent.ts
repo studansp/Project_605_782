@@ -18,6 +18,10 @@ export class CartComponent {
     public title:String="Cart";
     public shipType:string="0";
 
+    public creditcard:string='';
+    public expirationMonth:string=null;
+    public expirationYear:string=null;
+
     constructor(private apiService:ApiService, private router:Router) {
         this.model = new OrderModel();
         this.model.lines = new Array<OrderLineModel>();

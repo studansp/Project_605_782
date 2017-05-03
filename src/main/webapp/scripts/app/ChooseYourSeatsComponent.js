@@ -131,7 +131,7 @@ var ChooseYourSeatsComponent = (function () {
     ChooseYourSeatsComponent.prototype.addToCart = function () {
         var _this = this;
         if (this.selectedSeats.size == 0) {
-            alert('You must select at least one seat');
+            this.apiService.showError('You must select at least one seat');
         }
         else {
             var request = new CartItemRequest_1.CartItemRequest();

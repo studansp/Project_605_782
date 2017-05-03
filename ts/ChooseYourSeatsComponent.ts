@@ -155,7 +155,7 @@ export class ChooseYourSeatsComponent {
 
     public addToCart():void {
         if(this.selectedSeats.size==0) {
-            alert('You must select at least one seat');
+            this.apiService.showError('You must select at least one seat');
         } else {
             var request = new CartItemRequest();
             var tickets = new Array<TicketModel>();

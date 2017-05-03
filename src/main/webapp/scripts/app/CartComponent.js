@@ -21,6 +21,9 @@ var CartComponent = (function () {
         this.isOrderComplete = false;
         this.title = "Cart";
         this.shipType = "0";
+        this.creditcard = '';
+        this.expirationMonth = null;
+        this.expirationYear = null;
         this.model = new OrderModel_1.OrderModel();
         this.model.lines = new Array();
         if (apiService.isAuthenticated() == false) {

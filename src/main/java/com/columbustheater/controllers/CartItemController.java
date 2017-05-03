@@ -90,6 +90,8 @@ public class CartItemController extends ControllerBase {
             for (Ticket ticket : ticketResult) {
                 session.save(ticket);
             }
+
+            result.setModel(true);
         }
 
         session.getTransaction().commit();

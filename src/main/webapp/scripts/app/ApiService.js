@@ -23,6 +23,9 @@ var ApiService = (function () {
     ApiService.prototype.getAccount = function () {
         return this.account;
     };
+    ApiService.prototype.showSuccess = function () {
+        window["success"].show();
+    };
     ApiService.prototype.getAccountCookie = function () {
         var _this = this;
         var result = document.cookie.split(';')
@@ -51,6 +54,9 @@ var ApiService = (function () {
     };
     ApiService.prototype.isAuthenticated = function () {
         return this.account != null;
+    };
+    ApiService.prototype.getOrders = function () {
+        return this.simpleGetRequest("/api/orders");
     };
     ApiService.prototype.authenicate = function (model) {
         return this.simplePostRequest("/api/authenticate", model);

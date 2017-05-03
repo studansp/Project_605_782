@@ -26,6 +26,10 @@ export class ApiService {
         return this.account;
     }
 
+    public showSuccess():void {
+        window["success"].show();
+    }
+
     private getAccountCookie():AccountModel {
         var result = document.cookie.split(';')
             .map(c=>c.trim())
@@ -48,7 +52,6 @@ export class ApiService {
         document.cookie = `${this.accountCookieName}=${account}; ${expires}`;
     }
 
-
     public setAccount(account:AccountModel) {
         this.account=account;
         this.setAccountCookie(JSON.stringify(account), 1);
@@ -61,6 +64,10 @@ export class ApiService {
 
     public isAuthenticated():boolean {
         return this.account!=null;
+    }
+
+    public getOrders():Observable<ApiResponse<Array<OrderModel>>> {
+        return this.simpleGetRequest<Array<OrderModel>>("/api/orders");
     }
 
     public authenicate(model:LoginModel):Observable<ApiResponse<AccountModel>> {

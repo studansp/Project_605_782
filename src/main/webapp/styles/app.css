@@ -47,3 +47,20 @@ canvas {
 .red {
     color:red;
 }
+
+.popup-success {
+    position: fixed;
+    bottom:0;
+    right:100px;
+    border-radius: 25px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 10px;
+    padding-bottom: 0;
+    border: darkgreen 2px solid;
+}
+
+.order-history {
+    border: 2px solid #1e5799;
+    border-radius: 25px;
+}

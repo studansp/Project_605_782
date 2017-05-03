@@ -3,6 +3,7 @@ import {AccountModel} from "./models/AccountModel";
 import {ApiService} from "./ApiService";
 import {Router} from "@angular/router";
 import {ApiResponse} from "./models/ApiResponse";
+import {OrderModel} from "./models/OrderModel";
 
 @Component({
     selector: 'profile',
@@ -10,6 +11,7 @@ import {ApiResponse} from "./models/ApiResponse";
 })
 export class ProfileComponent {
     private model:AccountModel;
+    public orderHistory:Array<OrderModel> = new Array<OrderModel>();
 
     constructor(private apiService:ApiService, router:Router) {
         this.model = new AccountModel();
@@ -19,6 +21,9 @@ export class ProfileComponent {
         } else {
             apiService.getProfile()
                 .subscribe(m => {this.model=m.model;}, e => { router.navigateByUrl('/login'); });
+
+            apiService.getOrders()
+                .subscribe(m => {this.orderHistory=m.model;}, e => {});
         }
     }
 
@@ -32,8 +37,7 @@ export class ProfileComponent {
             this.model = response.model;
             this.model.token = this.apiService.getAccount().token;
             this.apiService.setAccount(this.model);
-        } else {
-            alert("Test error.")
+            this.apiService.showSuccess();
         }
     }
 }

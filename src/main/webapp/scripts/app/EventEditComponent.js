@@ -37,6 +37,7 @@ var EventEditComponent = (function () {
         var _this = this;
         this.apiService.updateEvent(this.model)
             .subscribe(function (m) {
+            _this.apiService.showSuccess();
             _this.model = m.model;
         }, function (e) { alert('Invalid event'); });
     };
